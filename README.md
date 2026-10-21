@@ -1,27 +1,45 @@
-# OpenScrutiny — a multi-agent evaluate-then-generate platform
+# OpenScrutiny
 
-OpenScrutiny is a general-purpose platform for **evaluating a list of items against complex rules and then generating deliverables from the results**. You feed it items, a crew of specialized AI agents assesses each one against a configurable ruleset, and a second stage turns those assessments into structured, copy-ready output.
+**A multi-agent engine for evaluating anything against a strict rulebook, then generating the paperwork.**
 
-It ships with one fully worked example: evaluating **gTLD (domain) application strings** against the public [ICANN New gTLD Program](https://newgtlds.icann.org/) requirements, then generating draft application answers. The domain layer is intentionally swappable — the engine itself knows nothing about domains.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tests](https://github.com/that-mike-bal/open-scrutiny/actions/workflows/test.yml/badge.svg)](https://github.com/that-mike-bal/open-scrutiny/actions/workflows/test.yml)
 
-**Stack:** CrewAI (multi-agent orchestration) · Google Gemini · FastAPI · React + Vite + TypeScript (shadcn/ui) · Supabase (Postgres).
+Define expert agents, a ruleset, tools, and a workflow in YAML. Get auditable, rubric-scored assessments with cited sources for every item you feed in, then draft the deliverables those assessments feed into. It ships with one brutal worked example: evaluating proposed top-level domain strings against the ICANN New gTLD Program rulebook.
+
+> **Screenshot placeholder.** A capture of the evaluation report and audit-log view belongs here. The UI needs a Supabase project to render, so no screenshot is bundled yet; see the [roadmap](#status-and-roadmap).
+
+**Stack:** CrewAI · Google Gemini (GPT-4o fallback) · FastAPI · React + Vite + TypeScript · Supabase (Postgres + pgvector)
 
 ---
 
-## What it does
+## The 60-second model
 
-The platform has two halves that share one database:
+![Architecture: client gates, FastAPI queue, Postgres, CrewAI workflows built from YAML, per-agent tools, rubric-scored findings](docs/assets/architecture.svg)
 
-1. **Evaluate** — a CrewAI crew runs a set of agents and tasks against each input item. In the bundled example this is risk assessment of a domain string (technical, legal, and policy/safeguard workflows), but the same machinery evaluates anything you can describe as agents + tasks + a ruleset.
-2. **Generate** — a three-tier answer-generation service takes the evaluation output plus a structured knowledge base and produces drafted deliverables (in the example, ICANN application answers), routing each field to an entity / selection / substantive handler.
+1. **Items come in** through the React client or the HTTP API. Cheap local gates reject obvious failures before any model is called.
+2. **Workflows run in sequence.** Each workflow is a CrewAI crew assembled at runtime from four YAML files: `agents.yaml`, `tasks.yaml`, `tools.yaml`, `workflows.yaml`.
+3. **Specialist agents own their tools.** Every agent declares which tools it may call and what context it produces and consumes, so behaviour is predictable and auditable.
+4. **Every task produces a rubric-shaped report.** Task prompts end in an `expected_output` template with explicit statuses (PASS / FLAGGED / BLOCKED, Minimal → High per dimension), and a closing gut-check task looks for contradictions.
+5. **Findings are stored with an audit trail**, then synthesised into a report and routed into the generation half, which drafts deliverables from the findings plus a knowledge base.
 
-```
-┌──────────────┐     ┌────────────┐     ┌─────────────────────┐
-│ React client │ ──▶ │  Supabase  │ ──▶ │   CrewAI service     │
-│  submit items│     │  (Postgres)│     │  evaluate → generate │
-│  view results│ ◀── │  results   │ ◀── │  (FastAPI)           │
-└──────────────┘     └────────────┘     └─────────────────────┘
-```
+The engine is config-driven: retargeting it means editing YAML and data, not Python. [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) has the full picture.
+
+---
+
+## The bundled example: gTLD string evaluation
+
+ICANN's New gTLD Program lets organisations apply to run their own top-level domain. An application costs six figures in non-refundable fees, and the string itself is judged across technical, legal, and policy dimensions against a rulebook that runs to hundreds of pages: DNS stability rules, similarity to the 1,500+ delegated TLDs, name-collision data, trademark conflicts across jurisdictions, geographic-name rules, government objections grounded in precedent, and cultural meaning in other languages. A human analyst takes days per string. Applicants want to know, before committing capital, whether a string will survive and what to mitigate.
+
+That makes it the hardest version of the "rulebook + candidates" pattern: hard binary gates alongside interpretive judgement, external databases and precedent, and an expensive, irreversible outcome. If the engine can do this, it can do a vendor policy, a grant rubric, or a brand guideline. The example runs three workflows per string:
+
+| Workflow | Agents | Tools | What it checks |
+|---|---|---|---|
+| `technical_risk_assessment` | String analyst, collision analyst, validator | `string_analyzer`, `similarity_analyzer`, `magnitude_collision_checker` | DNS label and RFC syntax rules; visual and phonetic similarity against the IANA root database; name-collision magnitude from ICANN research data; gut check |
+| `legal_risk_assessment` | Legal & IP risk analyst | `deep_research_legal_analyzer` (Gemini Deep Research over USPTO, EUIPO, WIPO, patents, web) | Trademark and patent conflicts weighed by holder viability, class overlap, and fame rather than raw text matches; validation pass; gut check |
+| `policy_safeguard_review` | GAC safeguard risk analyst | `brave_web_search`, `gac_precedent_analyzer`, `similarity_analyzer`, `guidebook_search` | Geographic-name status, ICANN safeguard questions, cultural and linguistic meaning across languages, government-objection risk against 242 GAC Early Warning precedents; gut check |
+
+The deep walkthrough, from the public Applicant Guidebook to each agent, task rubric, tool, and how the crew is assembled, is in [docs/examples/icann-gtld.md](docs/examples/icann-gtld.md).
 
 ---
 
@@ -72,11 +90,13 @@ cd client && npm run build-strict && npx vitest run
 
 > The bundled example's retrieval features use the public *ICANN Applicant Guidebook* PDF as a reference corpus. It is not included (it's large and user-supplied); RAG degrades gracefully without it. See [db/README.md](db/README.md) for where to place it.
 
+The engine is usable headless: `POST /api/evaluations/auto-submit` starts an evaluation and `GET /evaluations/{id}/workflows` reports progress. See [docs/API_REFERENCE.md](docs/API_REFERENCE.md).
+
 ---
 
-## Customize it for your own domain
+## Adapt it to your rulebook
 
-The engine is domain-agnostic; the ICANN example lives entirely in configuration and data. To retarget it, grep for the markers:
+The ICANN example lives entirely in configuration and data. [docs/ADAPTING.md](docs/ADAPTING.md) is a step-by-step tutorial that builds a second, tiny ruleset (a product name checked against a brand guideline: two agents, three tasks, one local-data tool) under [`examples/brand-name-check/`](examples/brand-name-check/) and runs it. To retarget the engine yourself, grep for the markers:
 
 ```bash
 grep -rn "CUSTOMIZE:" crewai_service scripts client/src
@@ -96,41 +116,35 @@ Each marker explains what to change. The main surfaces:
 | Item/question schema + categories | `scripts/categorize_questions.py` |
 | UI output types and sections | `client/src/components/CreateApplicationModal.tsx`, `client/src/lib/section-utils.ts` |
 
-Crew assembly (`crewai_service/crew.py`) reads the YAML above — you usually retarget by editing the config and data, not the Python. `CrewBuilder()` defaults to `evaluation/config/`; the generation half is built from `application/config/`.
+Crew assembly (`crewai_service/crew.py`) reads the YAML above — you usually retarget by editing the config and data, not the Python. `CrewBuilder()` defaults to `evaluation/config/`; pass `CrewBuilder(config_dir=...)` to point it at another tree. The generation half is built from `application/config/`.
 
 ---
 
-## Project structure
+## Design decisions
 
-```
-.
-├── crewai_service/          # FastAPI backend + CrewAI orchestration
-│   ├── evaluation/config/   # evaluation agents / tasks / tools / workflows (YAML) — the ruleset
-│   ├── application/config/  # generation agents / tasks / workflows (YAML)
-│   ├── environment.yaml     # shared runtime settings (memory, rate limits)
-│   ├── tools/               # custom agent tools
-│   ├── crew.py              # builds crews from the YAML config
-│   ├── app.py               # HTTP API
-│   └── answer_generation_service.py   # the generation half
-├── client/                  # React + Vite + TypeScript frontend
-├── db/                      # schema, migrations, and data-access layer
-├── data/                    # sample reference datasets + example knowledge base
-├── scripts/                 # setup and seeding scripts
-└── docs/                    # API reference, architecture, deployment, DB usage notes
-```
+- **Qualitative rubric over numeric scores.** Early versions emitted a single risk number per string. It looked precise and was not. Reports now use five qualitative levels per dimension (Minimal, Low, Moderate, Concerning, High) and lead with flags, each carrying the specific conflicting string, mark, jurisdiction, or magnitude that caused it.
+- **Memory off between items.** CrewAI memory is disabled for every agent and crew (`memory: false`), and per-environment settings in `environment.yaml` enforce it. One string's trademark findings must never leak into the next string's report.
+- **Single-threaded queue with 409.** One evaluation runs at a time. A second submission gets HTTP 409 and the client-side queue retries. That was chosen over a Celery and Redis job system for a workload where throughput was never the bottleneck, and it keeps the audit trail unambiguous.
+- **Regex extraction over structured output.** Task results are classified by pattern matching on the report text (`_classify_result_status` in `crewai_service/app.py`) with explicit failure phrases checked first and `REVIEW_REQUIRED` as the ambiguous default. It survives model output drift better than a strict schema and never silently marks a degraded run as clear.
+- **Validator and gut-check layers.** A validation-mode agent is declared with `validation_mode: true` and `contradiction_detection: true`, and every workflow ends in a short gut-check task that reviews the preceding outputs for logic, consistency, and completeness before anything reaches the report. Each stored task carries a 0–1 confidence score derived from tool data reliability and result certainty.
 
 ---
+
+## Status and roadmap
+
+**v0.1.0.** The engine, the bundled example, the React client, and the generation half are complete and documented; 103 backend tests and a strict TypeScript build pass in CI.
+
+Planned next:
+- A bundled sample report and UI screenshots.
+- Rewrite the frontend unit tests against the current components and gate ESLint in CI.
+- Split the 3,700-line `crewai_service/app.py` into routers.
+- Structured-output experiment alongside the regex classifier, with the audit trail deciding which wins.
+
+See [CHANGELOG.md](CHANGELOG.md) for history and [CONTRIBUTING.md](CONTRIBUTING.md) if you want to help.
 
 ## Documentation
 
-- [docs/API_REFERENCE.md](docs/API_REFERENCE.md) — HTTP API
-- [docs/CLIENT_ARCHITECTURE.md](docs/CLIENT_ARCHITECTURE.md) — frontend architecture
-- [docs/DEPLOY.md](docs/DEPLOY.md) — deploying (Render reference, Docker, macOS dev notes)
-- [docs/SUPABASE_CLIENT_USAGE.md](docs/SUPABASE_CLIENT_USAGE.md) — database client patterns
-- [db/README.md](db/README.md) — schema and setup
-- [crewai_service/README.md](crewai_service/README.md) — the evaluation engine (agents, tasks, tools, workflows)
-
----
+[docs/README.md](docs/README.md) indexes everything: architecture, the ICANN walkthrough, the adapting tutorial, the HTTP API, deployment, the database schema, and data sources.
 
 ## License
 
