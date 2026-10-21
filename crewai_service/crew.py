@@ -20,6 +20,7 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 import importlib
 import re
+import sys
 
 from crewai import Agent, Task, Crew, Process
 from crewai_service.utils.model_config import get_model_for_agent
@@ -497,8 +498,18 @@ Otherwise, provide the standard analysis output above.
                 logger.error(f"Tool '{tool_name}' is missing 'module' or 'class' in tools.yaml")
                 return None
 
-            # Dynamically import the module and get the class
-            module = importlib.import_module(module_path)
+            # Dynamically import the module and get the class. If the module is
+            # not on sys.path, retry with the config tree's parent directory so a
+            # config tree can ship its tools next to its YAML (see docs/ADAPTING.md).
+            try:
+                module = importlib.import_module(module_path)
+            except ImportError:
+                tree_root = str(self.config_dir.resolve().parent)
+                if tree_root in sys.path:
+                    raise
+                logger.info(f"Tool module '{module_path}' not importable; retrying with '{tree_root}' on sys.path")
+                sys.path.insert(0, tree_root)
+                module = importlib.import_module(module_path)
             tool_class = getattr(module, class_name)
             
             # Get initialization arguments from config

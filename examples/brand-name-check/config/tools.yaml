@@ -1,0 +1,12 @@
+# The tool catalogue for the brand-name-check example. One local-data tool.
+# `module` is resolved relative to this config tree's parent directory
+# (examples/brand-name-check/), so the example ships its own code.
+brand_guideline_lookup:
+  name: "Brand Guideline Lookup"
+  description: "Mechanical checks of a product name against data/brand_guideline.json"
+  class: "BrandGuidelineLookupTool"
+  module: "brand_tools.guideline_lookup"
+  primary_agent: brand_guardian
+  access_pattern: "exclusive"
+  output_type: "rule_check"
+  data_sources: ["data/brand_guideline.json"]

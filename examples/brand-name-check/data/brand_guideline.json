@@ -1,0 +1,16 @@
+{
+  "brand": "Northwind Goods (fictional)",
+  "version": "2026-01",
+  "naming_rules": {
+    "min_length": 3,
+    "max_length": 12,
+    "letters_only": true,
+    "single_word": true,
+    "must_not_start_with": ["i", "e"],
+    "forbidden_suffixes": ["ly", "ify", "io"],
+    "prohibited_terms": ["pro", "max", "ultra", "plus", "ai", "smart", "cloud", "lite", "premium"],
+    "tone": "Warm and concrete. Names should sound like an object you could hold, not a feature list. Two syllables preferred; no superlatives."
+  },
+  "existing_products": ["Atlas", "Compass", "Harbor", "Beacon", "Lantern", "Kettle"],
+  "reserved_names": ["Northwind", "Nordwind", "Tradewind"]
+}

@@ -1,0 +1,105 @@
+# The ruleset. Three steps: a tool-backed rule check, an interpretive review,
+# and a gut check. Placeholders: {product_name}, {category}.
+
+guideline_compliance_check:
+  description: |
+    Check the proposed product name '{product_name}' (a {category}) against the
+    brand naming guideline.
+
+    1. Call the "Brand Guideline Lookup" tool with product_name '{product_name}'.
+    2. Report every check the tool returns, with its PASS/FAIL result and detail.
+    3. Do not add rules of your own and do not soften a FAIL.
+    4. Quote the tone guidance the tool returns; the next task will apply it.
+  expected_output: |
+    # Guideline Compliance: {product_name}
+
+    **STATUS:** PASS / FLAGGED / BLOCKED  (copy the tool's status)
+
+    ## Rule-by-rule results
+    | Rule | Result | Detail |
+    |---|---|---|
+    | length | PASS/FAIL | ... |
+    | letters_only | PASS/FAIL | ... |
+    | single_word | PASS/FAIL | ... |
+    | must_not_start_with | PASS/FAIL | ... |
+    | forbidden_suffixes | PASS/FAIL | ... |
+    | prohibited_terms | PASS/FAIL | ... |
+    | existing_products | PASS/FAIL | ... |
+    | reserved_names | PASS/FAIL | ... |
+
+    ## Related existing products
+    [names the tool listed, or "None"]
+
+    ## Tone guidance (verbatim from the tool)
+    [text]
+
+    ## Recommendation
+    PROCEED / PROCEED WITH CAUTION / STOP
+  agent: brand_guardian
+  context_producer:
+    - guideline_check_results
+
+distinctiveness_review:
+  description: |
+    Review '{product_name}' as a name for a {category} sold by Northwind Goods,
+    using the guideline compliance results as context.
+
+    Assess, in this order:
+    1. Distinctiveness: could it be confused with any related existing product the
+       guideline check listed, or with a well-known product in the same category?
+    2. Pronounceability and spelling: can a customer say it after hearing it once
+       and spell it after saying it?
+    3. Tone fit: does it meet the tone guidance (warm, concrete, object-like,
+       no superlatives)?
+    4. Unfortunate meanings: does it mean or sound like something negative in
+       English, Spanish, French, German, Portuguese, or Japanese?
+
+    Rate each dimension on the qualitative scale Minimal / Low / Moderate /
+    Concerning / High risk. Do not compute an overall number. When in doubt
+    between two adjacent levels, choose the more cautious one and say why.
+  expected_output: |
+    # Distinctiveness Review: {product_name}
+
+    **STATUS:** CLEAR / FLAGGED / HIGH RISK
+
+    ## Findings
+    - **Distinctiveness**: [Minimal/Low/Moderate/Concerning/High] — [specific products or reasons]
+    - **Pronounceability and spelling**: [level] — [reason]
+    - **Tone fit**: [level] — [reason, citing the tone guidance]
+    - **Unfortunate meanings**: [level] — [language and meaning, or "none found"]
+
+    ## Flags
+    [Each concern on its own line with the specific evidence, or "No flags."]
+
+    ## Recommendation
+    PROCEED / PROCEED WITH CAUTION / REWORK NAME
+    [one paragraph of reasoning]
+  agent: naming_reviewer
+  context:
+    - guideline_compliance_check
+  context_consumer:
+    - guideline_check_results
+  context_producer:
+    - distinctiveness_results
+
+naming_gut_check:
+  description: |
+    Quick sanity check of the two reviews of '{product_name}'.
+    Read the guideline compliance results and the distinctiveness review and look
+    for contradictions, unsupported claims, and missing sections. Do not redo the analysis.
+  expected_output: |
+    Naming Gut Check for {product_name}:
+
+    OUTPUTS REVIEWED: Guideline Compliance, Distinctiveness Review
+    LOGIC CHECK: [Pass/Fail] - Do the findings make logical sense?
+    CONSISTENCY CHECK: [Pass/Fail] - Do the two reviews agree, and does each recommendation follow from its findings?
+    COMPLETENESS CHECK: [Pass/Fail] - Are all required sections present?
+
+    ISSUES FOUND: [List any obvious problems or "None"]
+    OVERALL STATUS: PASS / FLAGGED / BLOCKED
+  agent: naming_reviewer
+  context:
+    - guideline_compliance_check
+    - distinctiveness_review
+  context_producer:
+    - gut_check_results

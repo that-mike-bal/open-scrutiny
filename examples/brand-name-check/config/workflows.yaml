@@ -1,0 +1,19 @@
+# One workflow: rule check, interpretive review, gut check.
+brand_name_check:
+  name: "Brand Name Check"
+  description: "Evaluate a proposed product name against the Northwind Goods naming guideline"
+  agents:
+    - brand_guardian
+    - naming_reviewer
+  tasks:
+    - guideline_compliance_check
+    - distinctiveness_review
+    - naming_gut_check
+  process: "sequential"
+  memory: false
+  share_crew: true
+  verbose: true
+  max_rpm: 10
+  max_execution_time: 300
+  allow_delegation: false
+  max_iter: 2
