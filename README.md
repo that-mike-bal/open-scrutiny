@@ -132,7 +132,7 @@ Crew assembly (`crewai_service/crew.py`) reads the YAML above — you usually re
 
 ## Status and roadmap
 
-**v0.1.0.** The engine, the bundled example, the React client, and the generation half are complete and documented; 103 backend tests and a strict TypeScript build pass in CI.
+**v0.1.0.** The engine, the bundled example, the React client, and the generation half are complete and documented; 110 backend tests and a strict TypeScript build pass in CI.
 
 Planned next:
 - A bundled sample report and UI screenshots.

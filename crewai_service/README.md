@@ -17,6 +17,7 @@ Two config trees exist:
 
 - `evaluation/config/` — the evaluation ruleset. **This is what `CrewBuilder()` loads by default** and what the evaluation endpoints run.
 - `application/config/` — the generation half (turning evaluation output plus a knowledge base into drafted deliverables).
+- Any other directory passed as `CrewBuilder(config_dir=...)`. A tree can ship its own tools next to its YAML; [`examples/brand-name-check/`](../examples/brand-name-check/) does, and [docs/ADAPTING.md](../docs/ADAPTING.md) walks through it.
 
 `environment.yaml` (one level up, shared by both trees) holds per-environment runtime knobs: memory on/off, rate limits, timeouts. A tree can override it with its own `environment.yaml`.
 

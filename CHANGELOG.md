@@ -18,7 +18,7 @@ Initial public release.
 - Supabase schema with Row Level Security and migrations; setup and seeding scripts.
 - Second example ruleset, `examples/brand-name-check/`: two agents, three tasks, one local-data tool, with a build test. `CrewBuilder` can now import a config tree's tools from the tree's own directory.
 - Documentation: README product page, `docs/ARCHITECTURE.md`, `docs/examples/icann-gtld.md`, `docs/ADAPTING.md`, `docs/API_REFERENCE.md`, `docs/DEPLOY.md`, `data/SOURCES.md`, `CONTRIBUTING.md`, `SECURITY.md`.
-- CI: backend tests (103 passing with placeholder keys) and a strict TypeScript build.
+- CI: backend tests (110 passing with placeholder keys) and a strict TypeScript build.
 
 ### Security
 - All credentials are environment variables; the Supabase service-role key is backend-only.
