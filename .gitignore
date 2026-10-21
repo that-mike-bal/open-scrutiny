@@ -1,0 +1,139 @@
+# ---------------------------------------------------------------------------
+# Secrets and credentials — never commit real values
+# ---------------------------------------------------------------------------
+# All .env variants are ignored EXCEPT the placeholder templates.
+.env
+.env.*
+!.env.example
+!client/.env.example
+!client/env.example
+secrets/
+*.key
+*.pem
+*service_account*.json
+.mcp.json
+
+# ---------------------------------------------------------------------------
+# Local assistant / IDE tooling (not part of this project)
+# ---------------------------------------------------------------------------
+mem0/
+.cursor/
+.cursor-settings
+.cursor/rules/openmemory.mdc
+CLAUDE.md
+openmemory.md
+.claude/settings.local.json
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv
+.venv*/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ---------------------------------------------------------------------------
+# Node / client
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ---------------------------------------------------------------------------
+# Build outputs
+# ---------------------------------------------------------------------------
+dist/
+build/
+server/public
+vite.config.ts.*
+
+# ---------------------------------------------------------------------------
+# IDEs / OS
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ---------------------------------------------------------------------------
+# Databases and vector indexes (rebuilt locally; see db/create_schema.py and
+# scripts/setup_rag_database.py)
+# ---------------------------------------------------------------------------
+*.db
+*.sqlite3
+*.sqlite
+
+# ---------------------------------------------------------------------------
+# Logs
+# ---------------------------------------------------------------------------
+*.log
+logs/
+
+# ---------------------------------------------------------------------------
+# Testing
+# ---------------------------------------------------------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.ipynb_checkpoints
+.python-version
+
+# ---------------------------------------------------------------------------
+# Runtime / generated artifacts (not shipped)
+# ---------------------------------------------------------------------------
+backups/
+outputs/
+evaluation_exports/
+magnitude_data/
+uploads/
+archive/
+temp/
+tmp/
+*.tmp
+*.temp
+*_report.md
+*_analysis.md
+*_evaluation.md
+
+# ---------------------------------------------------------------------------
+# Large / reference binaries (user-supplied; see README)
+# ---------------------------------------------------------------------------
+*.pdf
+*.xlsx
+*.zip
+*.tar.gz

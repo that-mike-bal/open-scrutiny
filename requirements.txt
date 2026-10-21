@@ -1,0 +1,35 @@
+# CrewAI deployment with essential dependencies for application functionality
+# NOTE: Using Python 3.12 - proven build strategy with gradual dependency addition
+
+# Core CrewAI with tools (required by our configuration)
+crewai[tools,google-genai]>=0.175.0     # Includes SerperDevTool, other tools, and native Gemini provider
+
+# Essential web framework
+fastapi>=0.115.9
+uvicorn>=0.34.2
+python-multipart>=0.0.6  # Required for form data and file uploads
+
+# Database client
+supabase>=2.15.2
+
+# AI providers
+openai>=1.75.0
+google-generativeai>=0.8.0  # Used by the RAG chat and answer-generation services
+
+# Google APIs (required by our Google Drive integration)
+google-auth>=2.15.0
+google-auth-oauthlib>=1.0.0
+google-auth-httplib2>=0.1.0
+google-api-python-client>=2.0.0
+
+# Environment utilities
+python-dotenv>=1.1.0
+
+# File handling utilities
+aiofiles>=24.1.0  # Required by file_upload_service.py
+
+# PDF processing (optional, used by the RAG tools)
+pdfplumber>=0.7.0
+
+# NOTE: Added back essential dependencies that our application code actually imports
+# Build proven to work with this approach - start minimal, add what's needed

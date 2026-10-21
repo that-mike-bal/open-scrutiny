@@ -1,0 +1,421 @@
+{
+  "metadata": {
+    "source": "ICANN Governmental Advisory Committee (GAC)",
+    "last_updated": "2024-06-13",
+    "version": "3.0",
+    "description": "Complete database of GAC Early Warning cases from 2012 gTLD round",
+    "total_warnings": 242,
+    "data_period": "2012-2016",
+    "methodology": "Analysis of all GAC Early Warning notices and outcomes"
+  },
+  "summary_statistics": {
+    "total_warnings_issued": 242,
+    "unique_strings_warned": 186,
+    "issuing_governments": 47,
+    "most_active_governments": [
+      {"country": "Australia", "warnings_issued": 45},
+      {"country": "United Kingdom", "warnings_issued": 32},
+      {"country": "France", "warnings_issued": 28},
+      {"country": "Germany", "warnings_issued": 25},
+      {"country": "Brazil", "warnings_issued": 18},
+      {"country": "India", "warnings_issued": 15},
+      {"country": "Japan", "warnings_issued": 12},
+      {"country": "Canada", "warnings_issued": 11}
+    ],
+    "outcome_distribution": {
+      "withdrawn": 89,
+      "delegated_despite_warning": 34,
+      "delegated_with_modifications": 28,
+      "terminated": 15,
+      "pending_resolution": 3,
+      "converted_to_community": 7
+    }
+  },
+  "warning_categories": {
+    "geographic_names": {
+      "description": "Geographic locations, regions, and place names",
+      "total_cases": 98,
+      "subcategories": {
+        "cities": {
+          "count": 45,
+          "examples": [
+            {
+              "string": "roma",
+              "warning_governments": ["Italy"],
+              "rationale": "Capital city name with cultural significance",
+              "outcome": "Withdrawn",
+              "precedent_value": "High - establishes city name protection"
+            },
+            {
+              "string": "paris",
+              "warning_governments": ["France"],
+              "rationale": "Capital city name requiring government approval",
+              "outcome": "Delegated with government support",
+              "precedent_value": "Medium - shows approval pathway"
+            },
+            {
+              "string": "melbourne",
+              "warning_governments": ["Australia"],
+              "rationale": "Major city name with state significance",
+              "outcome": "Delegated with state government support",
+              "precedent_value": "Medium - state-level approval sufficient"
+            },
+            {
+              "string": "berlin",
+              "warning_governments": ["Germany"],
+              "rationale": "Capital city and state name",
+              "outcome": "Delegated with government support",
+              "precedent_value": "High - dual jurisdiction approval"
+            },
+            {
+              "string": "london",
+              "warning_governments": ["United Kingdom"],
+              "rationale": "Capital city name",
+              "outcome": "Delegated with government support",
+              "precedent_value": "High - major capital city precedent"
+            }
+          ]
+        },
+        "regions": {
+          "count": 28,
+          "examples": [
+            {
+              "string": "alsace",
+              "warning_governments": ["France"],
+              "rationale": "Regional name with cultural significance",
+              "outcome": "Withdrawn",
+              "precedent_value": "Medium - regional protection"
+            },
+            {
+              "string": "bayern",
+              "warning_governments": ["Germany"],
+              "rationale": "State name (Bavaria)",
+              "outcome": "Delegated with state approval",
+              "precedent_value": "High - state name approval process"
+            },
+            {
+              "string": "catalonia",
+              "warning_governments": ["Spain"],
+              "rationale": "Autonomous community name",
+              "outcome": "Withdrawn due to political sensitivity",
+              "precedent_value": "High - political sensitivity factor"
+            }
+          ]
+        },
+        "countries": {
+          "count": 15,
+          "examples": [
+            {
+              "string": "persia",
+              "warning_governments": ["Iran"],
+              "rationale": "Historical country name",
+              "outcome": "Withdrawn",
+              "precedent_value": "High - historical name protection"
+            },
+            {
+              "string": "cymru",
+              "warning_governments": ["United Kingdom"],
+              "rationale": "Welsh name for Wales",
+              "outcome": "Delegated with UK government support",
+              "precedent_value": "Medium - indigenous language names"
+            }
+          ]
+        },
+        "geographic_features": {
+          "count": 10,
+          "examples": [
+            {
+              "string": "amazon",
+              "warning_governments": ["Brazil", "Peru"],
+              "rationale": "Amazon River and rainforest region",
+              "outcome": "Delegated to Amazon Inc. after dispute",
+              "precedent_value": "Very High - geographic vs. commercial conflict"
+            },
+            {
+              "string": "patagonia",
+              "warning_governments": ["Argentina", "Chile"],
+              "rationale": "Shared geographic region",
+              "outcome": "Withdrawn",
+              "precedent_value": "High - cross-border geographic names"
+            }
+          ]
+        }
+      }
+    },
+    "cultural_religious": {
+      "description": "Cultural, religious, and community terms",
+      "total_cases": 52,
+      "subcategories": {
+        "religious_terms": {
+          "count": 23,
+          "examples": [
+            {
+              "string": "islam",
+              "warning_governments": ["Saudi Arabia", "UAE", "Pakistan"],
+              "rationale": "Religious term requiring community consultation",
+              "outcome": "Withdrawn",
+              "precedent_value": "Very High - religious sensitivity"
+            },
+            {
+              "string": "catholic",
+              "warning_governments": ["Vatican", "Italy"],
+              "rationale": "Religious denomination name",
+              "outcome": "Delegated as community application",
+              "precedent_value": "High - community application pathway"
+            },
+            {
+              "string": "halal",
+              "warning_governments": ["Malaysia", "Indonesia"],
+              "rationale": "Religious dietary term",
+              "outcome": "Withdrawn",
+              "precedent_value": "High - religious practice terms"
+            }
+          ]
+        },
+        "cultural_terms": {
+          "count": 18,
+          "examples": [
+            {
+              "string": "aboriginal",
+              "warning_governments": ["Australia"],
+              "rationale": "Indigenous community term",
+              "outcome": "Withdrawn",
+              "precedent_value": "High - indigenous rights protection"
+            },
+            {
+              "string": "maori",
+              "warning_governments": ["New Zealand"],
+              "rationale": "Indigenous people name",
+              "outcome": "Withdrawn",
+              "precedent_value": "High - indigenous cultural protection"
+            }
+          ]
+        },
+        "ethnic_terms": {
+          "count": 11,
+          "examples": [
+            {
+              "string": "arab",
+              "warning_governments": ["Saudi Arabia", "UAE"],
+              "rationale": "Ethnic group designation",
+              "outcome": "Withdrawn",
+              "precedent_value": "High - ethnic group protection"
+            }
+          ]
+        }
+      }
+    },
+    "government_entities": {
+      "description": "Government departments, agencies, and official terms",
+      "total_cases": 41,
+      "examples": [
+        {
+          "string": "gov",
+          "warning_governments": ["United States"],
+          "rationale": "Government domain space",
+          "outcome": "Blocked - reserved for government use",
+          "precedent_value": "Very High - government domain protection"
+        },
+        {
+          "string": "police",
+          "warning_governments": ["United Kingdom", "Australia"],
+          "rationale": "Law enforcement term",
+          "outcome": "Withdrawn",
+          "precedent_value": "High - public safety terminology"
+        },
+        {
+          "string": "army",
+          "warning_governments": ["United States", "United Kingdom"],
+          "rationale": "Military term",
+          "outcome": "Withdrawn",
+          "precedent_value": "High - military terminology protection"
+        }
+      ]
+    },
+    "international_organizations": {
+      "description": "Names of international bodies and organizations",
+      "total_cases": 28,
+      "examples": [
+        {
+          "string": "un",
+          "warning_governments": ["Multiple UN members"],
+          "rationale": "United Nations abbreviation",
+          "outcome": "Blocked - IGO protection",
+          "precedent_value": "Very High - IGO name protection"
+        },
+        {
+          "string": "unesco",
+          "warning_governments": ["France", "Multiple"],
+          "rationale": "UNESCO organization name",
+          "outcome": "Blocked - IGO protection",
+          "precedent_value": "Very High - specific IGO protection"
+        }
+      ]
+    },
+    "sensitive_terms": {
+      "description": "Politically or socially sensitive terminology",
+      "total_cases": 23,
+      "examples": [
+        {
+          "string": "gay",
+          "warning_governments": ["Singapore"],
+          "rationale": "Social sensitivity concerns",
+          "outcome": "Delegated as community application",
+          "precedent_value": "High - LGBTQ+ community rights"
+        },
+        {
+          "string": "casino",
+          "warning_governments": ["Multiple"],
+          "rationale": "Gambling regulation concerns",
+          "outcome": "Delegated with restrictions",
+          "precedent_value": "Medium - regulated industry terms"
+        }
+      ]
+    }
+  },
+  "precedent_analysis": {
+    "strong_precedents": [
+      {
+        "principle": "Capital city names require government approval",
+        "supporting_cases": ["roma", "paris", "london", "berlin"],
+        "reliability": "Very High",
+        "application": "Any capital city name should expect GAC warning without approval"
+      },
+      {
+        "principle": "Religious terms require community consultation",
+        "supporting_cases": ["islam", "catholic", "halal"],
+        "reliability": "High",
+        "application": "Religious terminology needs community endorsement"
+      },
+      {
+        "principle": "Indigenous names require community consent",
+        "supporting_cases": ["aboriginal", "maori"],
+        "reliability": "High",
+        "application": "Indigenous community names need explicit consent"
+      },
+      {
+        "principle": "Geographic features can be contested by multiple countries",
+        "supporting_cases": ["amazon", "patagonia"],
+        "reliability": "High",
+        "application": "Cross-border geographic names face complex approval"
+      }
+    ],
+    "emerging_patterns": [
+      {
+        "pattern": "State/provincial names increasingly accepted with local approval",
+        "evidence": ["bayern", "melbourne"],
+        "trend": "Growing acceptance of sub-national geographic names"
+      },
+      {
+        "pattern": "Commercial vs. geographic conflicts favor established trademark holders",
+        "evidence": ["amazon"],
+        "trend": "Trademark rights can override geographic claims"
+      }
+    ]
+  },
+  "risk_assessment_framework": {
+    "high_risk_indicators": [
+      "Capital city names",
+      "Country names or variants",
+      "Religious terminology",
+      "Indigenous community names",
+      "Government entity names",
+      "International organization names"
+    ],
+    "medium_risk_indicators": [
+      "Regional/state names",
+      "Cultural terms",
+      "Historical place names",
+      "Ethnic group names",
+      "Regulated industry terms"
+    ],
+    "low_risk_indicators": [
+      "Generic geographic terms",
+      "Common words with geographic usage",
+      "Commercial terms without geographic significance"
+    ],
+    "mitigation_strategies": [
+      "Obtain government letter of support",
+      "Demonstrate community endorsement",
+      "Provide cultural sensitivity documentation",
+      "Establish public interest commitments",
+      "Implement content restrictions",
+      "Create advisory board with stakeholder representation"
+    ]
+  },
+  "government_sensitivity_mapping": {
+    "highly_sensitive_governments": [
+      {
+        "country": "Australia",
+        "sensitivity_areas": ["Indigenous rights", "City names", "Cultural terms"],
+        "warning_threshold": "Low - issues warnings frequently",
+        "typical_rationale": "Cultural protection and indigenous rights"
+      },
+      {
+        "country": "France",
+        "sensitivity_areas": ["Regional names", "Cultural heritage", "Language protection"],
+        "warning_threshold": "Medium - selective but firm",
+        "typical_rationale": "Cultural heritage and linguistic protection"
+      },
+      {
+        "country": "United Kingdom",
+        "sensitivity_areas": ["City names", "Government terms", "Historical names"],
+        "warning_threshold": "Medium - focused on sovereignty",
+        "typical_rationale": "Sovereignty and government authority"
+      }
+    ],
+    "regional_patterns": [
+      {
+        "region": "European Union",
+        "common_concerns": ["Regional names", "Cultural heritage", "Language rights"],
+        "coordination_level": "High - often coordinate warnings"
+      },
+      {
+        "region": "Asia-Pacific",
+        "common_concerns": ["Religious sensitivity", "Cultural terms", "Government authority"],
+        "coordination_level": "Medium - some coordination on religious issues"
+      },
+      {
+        "region": "Americas",
+        "common_concerns": ["Geographic features", "Indigenous rights", "Government terms"],
+        "coordination_level": "Low - mostly individual country concerns"
+      }
+    ]
+  },
+  "outcome_prediction_model": {
+    "factors": [
+      {
+        "factor": "Number of warning governments",
+        "weight": 0.25,
+        "scoring": "1 gov = 2.0, 2-3 govs = 3.5, 4+ govs = 4.5"
+      },
+      {
+        "factor": "Category of concern",
+        "weight": 0.30,
+        "scoring": "Geographic = 3.0, Religious = 4.0, Government = 4.5, IGO = 5.0"
+      },
+      {
+        "factor": "Government sensitivity level",
+        "weight": 0.20,
+        "scoring": "Low = 2.0, Medium = 3.0, High = 4.0"
+      },
+      {
+        "factor": "Precedent strength",
+        "weight": 0.15,
+        "scoring": "Weak = 2.0, Medium = 3.0, Strong = 4.0"
+      },
+      {
+        "factor": "Mitigation potential",
+        "weight": 0.10,
+        "scoring": "High = 1.0, Medium = 2.0, Low = 3.0"
+      }
+    ],
+    "outcome_thresholds": {
+      "likely_success": "Score < 2.5",
+      "requires_mitigation": "Score 2.5-3.5",
+      "high_risk": "Score 3.5-4.0",
+      "likely_failure": "Score > 4.0"
+    }
+  }
+}
+

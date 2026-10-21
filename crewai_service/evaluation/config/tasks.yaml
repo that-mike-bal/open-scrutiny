@@ -1,0 +1,1475 @@
+# ==========================================================================
+# CUSTOMIZE: This file IS the ruleset. Each task is one evaluation step: its
+# `description` is the instruction the agent follows and its `expected_output`
+# is the rubric-shaped report it must produce. Rewrite these for your domain.
+# This platform is a domain-agnostic evaluate-then-generate engine; the
+# gTLD/ICANN ruleset is just the bundled example. Grep for 'CUSTOMIZE:'
+# to find every retargeting point. See the README's Customize section.
+#
+# Inputs available for substitution: {tld_string}, {use_case}
+# (see crewai_service/app.py run_sequential_workflows). Only these two
+# placeholders are substituted; other braces are left untouched.
+# ==========================================================================
+
+
+# ---- TECHNICAL RISK ASSESSMENT ------------------------------------------
+
+dns_stability_review:
+  description: |
+    Perform comprehensive DNS stability and technical compliance validation for '{tld_string}' using efficient two-tier approach.
+
+    **TIER 1 - BASIC TECHNICAL COMPLIANCE (Fast):**
+    1. **Character Length Check**: Verify 3-63 characters
+    2. **ASCII Validation**: Ensure only valid ASCII characters (a-z, 0-9, hyphen)
+    3. **Hyphen Position Rules**: No hyphens in 3rd/4th positions, no start/end hyphens
+    4. **Numeric Check**: Cannot be all numeric
+    5. **Basic Standards Compliance**: Flag obvious technical violations
+
+    **TIER 2 - DNS STABILITY ANALYSIS (If Tier 1 passes):**
+
+    **6. Root Zone Label Generation Rules (RZ-LGR) Validation:**
+    - Check for script mixing (different writing systems in one string)
+    - Validate character variants and confusables
+    - Ensure no prohibited code points
+    - Flag any non-ASCII for IDN expert review
+
+    **7. RFC Standards Compliance Assessment:**
+    - **RFC 1035**: Verify DNS name syntax rules, case-insensitive handling
+    - **RFC 1123**: Confirm host name requirements, relaxed syntax rules
+    - **RFC 2181**: Check DNS specification compliance, name length limits
+    - Use TLD String Analyzer tool for specific RFC validation
+
+    **8. Protocol Compatibility Analysis:**
+    - Assess DNS resolution compatibility across major DNS software
+    - Check for potential parsing issues in DNS queries/responses
+    - Evaluate compatibility with DNS security extensions (DNSSEC)
+    - Flag any string patterns that might cause resolver issues
+
+    **9. Character Encoding Validation:**
+    - Confirm proper UTF-8 encoding for international characters
+    - Validate ASCII subset compliance for basic strings
+    - Check for normalization issues (NFC, NFD, NFKC, NFKD)
+    - Flag mixed scripts or complex Unicode for expert review
+
+    **TIER 2 EXECUTION APPROACH:**
+    1. **Use TLD String Analyzer** first for comprehensive technical analysis
+    2. **Reference ICANN Guidebook** for official criteria and edge cases
+    3. **Apply conservative assessment** - when in doubt, flag for expert review
+    4. **Focus on practical DNS deployment** - will this work in real DNS infrastructure?
+
+    **For non-ASCII strings**: Flag for expert IDN review rather than attempting complex validation.
+
+    🔧 **DETAILED TOOL USAGE**:
+    - **TLD String Analyzer**: Primary tool for technical compliance validation
+      - Call with tld_string parameter for comprehensive analysis
+      - Extract specific RFC compliance results
+      - Use character analysis and risk assessment features
+
+    - **ICANN Guidebook Search**: Reference official guidance
+      - Search "DNS Stability Review" for evaluation criteria
+      - Search "Root Zone Label Generation Rules" for RZ-LGR requirements
+      - Search "Technical Requirements" for RFC compliance standards
+      - Search "Internationalized Domain Names" for non-ASCII handling
+
+    **FOCUS**: Reliable, tool-driven validation with specific actionable checks for each component.
+  expected_output: |
+    # 🛡️ DNS Stability & Technical Compliance Assessment: .{tld_string}
+
+    **STATUS:** ✅ PASS / ⚠️ FLAGGED / ❌ BLOCKED
+
+    ## **🔍 ANALYSIS APPROACH**
+
+    ### **Two-Tier Validation Methodology**
+    I conducted a comprehensive DNS stability assessment using a two-tier approach designed to efficiently identify both basic compliance issues and advanced stability concerns.
+
+    **My Assessment Process:**
+    1. **Tier 1 - Basic Technical Compliance**: Rapid validation of fundamental DNS requirements
+    2. **Tier 2 - DNS Stability Analysis**: In-depth technical compliance and stability assessment
+    3. **RFC Standards Validation**: Verification against DNS specification requirements
+    4. **Expert Review Determination**: Conservative flagging for complex cases requiring specialist review
+
+    ### **Tools and Data Sources Used**
+    - **TLD String Analyzer**: Primary tool for comprehensive technical validation
+    - **ICANN Guidebook Search**: Referenced official DNS stability criteria and requirements
+    - **RFC Compliance Database**: Validated against DNS specification standards
+    - **Root Zone Label Generation Rules**: Checked for character and script compliance
+
+    ## **📊 OVERALL ASSESSMENT RESULTS**
+
+    ### **Final Technical Compliance Status**
+    - **Overall Status**: ✅ PASS / ⚠️ FLAGGED / ❌ BLOCKED
+    - **Tier 1 (Basic Compliance)**: ✅ PASS / ❌ FAIL
+    - **Tier 2 (Stability Analysis)**: ✅ PASS / ⚠️ FLAGGED / ❌ FAIL / ➡️ SKIPPED
+    - **Expert Review Required**: Yes/No
+    - **ICANN Application Ready**: Yes/No
+
+    ## **🔍 TIER 1 - BASIC TECHNICAL COMPLIANCE**
+
+    ### **Character-Level Validation Results**
+
+    **Length Validation**
+    - **Result**: ✅ PASS / ❌ FAIL
+    - **String Length**: [X] characters
+    - **Requirement**: 3-63 characters (DNS standard)
+    - **Analysis**: [Detailed explanation of length compliance]
+
+    **ASCII Character Compliance**
+    - **Result**: ✅ PASS / ⚠️ IDN_REVIEW_REQUIRED / ❌ INVALID_CHARS
+    - **Character Set**: [Analysis of characters used]
+    - **Findings**: [Detailed explanation of character compliance]
+    - **IDN Considerations**: [Any non-ASCII character implications]
+
+    **Hyphen Position Rules**
+    - **Result**: ✅ PASS / ❌ VIOLATION
+    - **Rules Checked**: No start/end hyphens, no 3rd/4th position hyphens
+    - **Findings**: [Detailed explanation of hyphen compliance or violations]
+    - **Positions**: [Specific positions if violations found]
+
+    **Numeric String Validation**
+    - **Result**: ✅ PASS / ❌ ALL_NUMERIC
+    - **Analysis**: [Explanation of numeric content assessment]
+    - **Rationale**: [Why all-numeric strings are not permitted]
+
+    ### **Tier 1 Compliance Summary**
+    **Issues Identified**: [List specific basic compliance issues or state "None - all basic checks passed"]
+
+    **Resolution Required**: [Specific actions needed to address issues or "No action required"]
+
+    ## **🔍 TIER 2 - DNS STABILITY ANALYSIS**
+
+    [If Tier 1 failed: "⚠️ SKIPPED - Tier 1 failures must be resolved before proceeding to stability analysis"]
+
+    ### **Advanced Technical Validation Results**
+
+    **Root Zone Label Generation Rules (RZ-LGR)**
+    - **Result**: ✅ COMPLIANT / ⚠️ REVIEW_REQUIRED / ❌ VIOLATION
+    - **Analysis**: [Detailed explanation of RZ-LGR compliance]
+    - **Script Validation**: [Assessment of character scripts and variants]
+    - **Confusables Check**: [Analysis of character confusability issues]
+
+    **RFC 1035 (DNS Name Syntax)**
+    - **Result**: ✅ COMPLIANT / ❌ VIOLATION
+    - **Analysis**: [Detailed explanation of DNS syntax compliance]
+    - **Specific Requirements**: [Which RFC 1035 requirements were validated]
+    - **Findings**: [Any syntax issues or compliance confirmations]
+
+    **RFC 1123 (Host Requirements)**
+    - **Result**: ✅ COMPLIANT / ❌ VIOLATION
+    - **Analysis**: [Detailed explanation of host requirements compliance]
+    - **Relaxed Rules**: [Assessment of RFC 1123 relaxed syntax rules]
+    - **Findings**: [Any host requirement issues or compliance confirmations]
+
+    **RFC 2181 (DNS Specification)**
+    - **Result**: ✅ COMPLIANT / ❌ VIOLATION
+    - **Analysis**: [Detailed explanation of DNS specification compliance]
+    - **Name Length Limits**: [Assessment of DNS name length requirements]
+    - **Findings**: [Any specification issues or compliance confirmations]
+
+    **Protocol Compatibility Assessment**
+    - **Result**: ✅ COMPATIBLE / ⚠️ CONCERNS / ❌ INCOMPATIBLE
+    - **DNS Software Compatibility**: [Assessment of major DNS software compatibility]
+    - **Resolver Issues**: [Analysis of potential DNS resolver problems]
+    - **DNSSEC Compatibility**: [Assessment of DNS security extension compatibility]
+    - **Findings**: [Specific compatibility issues or confirmations]
+
+    **Character Encoding Validation**
+    - **Result**: ✅ VALID / ⚠️ IDN_REQUIRED / ❌ INVALID
+    - **UTF-8 Compliance**: [Assessment of character encoding]
+    - **Normalization**: [Analysis of Unicode normalization requirements]
+    - **Findings**: [Encoding issues or compliance confirmations]
+
+    ### **DNS Stability Risk Assessment**
+    **Risk Factors Identified**: [List any stability concerns or state "None identified"]
+
+    **Stability Analysis**: [Detailed explanation of DNS stability implications]
+
+    ## **⚠️ EXPERT REVIEW TRIGGERS**
+
+    ### **IDN Validation Requirements**
+    - **IDN Review Required**: [Yes/No]
+    - **Reason**: [Non-ASCII characters detected or other IDN considerations]
+    - **Next Steps**: [Specific IDN validation requirements]
+
+    ### **Complex Technical Issues**
+    - **Issues Identified**: [List complex technical issues or state "None"]
+    - **Expert Review Needed**: [Explanation of why expert review is required]
+    - **Specialist Required**: [Type of technical specialist needed]
+
+    ### **Standards Compliance Concerns**
+    - **Concerns Identified**: [List standards compliance issues or state "None"]
+    - **Impact Assessment**: [Explanation of potential impact on DNS stability]
+    - **Resolution Path**: [Steps needed to address concerns]
+
+    ## **📋 RECOMMENDATIONS & NEXT STEPS**
+
+    ### **Immediate Actions Required**
+    - **Critical Issues**: [Required fixes or state "None required"]
+    - **Timeline**: [Urgency of required actions]
+    - **Dependencies**: [Any dependencies for issue resolution]
+
+    ### **Expert Review Requirements**
+    - **Review Type**: [IDN validation, complex cases, or "Not required"]
+    - **Specialist Needed**: [Type of expert required]
+    - **Timeline**: [When expert review should occur]
+
+    ### **ICANN Application Readiness**
+    - **Technical Readiness**: [Ready/Needs fixes/Requires expert review]
+    - **Documentation Needs**: [Additional technical documentation required]
+    - **Compliance Certification**: [Status of technical compliance certification]
+
+    ## **🔧 VALIDATION METHODOLOGY & CONFIDENCE**
+
+    ### **Analysis Method**
+    - **Validation Approach**: Two-tier technical compliance + DNS stability analysis
+    - **Tools Used**: TLD String Analyzer, ICANN Guidebook Search
+    - **Standards Referenced**: RFC 1035, RFC 1123, RFC 2181, RZ-LGR
+    - **Database Sources**: ICANN technical requirements, DNS specification standards
+
+    ### **ICANN Guidebook References**
+    - **Sections Consulted**: [List relevant guidebook sections referenced]
+    - **Criteria Applied**: [Specific ICANN evaluation criteria used]
+    - **Official Requirements**: [Key official requirements validated against]
+
+    ### **Confidence Assessment**
+    - **Analysis Confidence**: High/Medium/Low
+    - **Data Quality**: ✅ AUTHORITATIVE SOURCES / ⚠️ PARTIAL DATA
+    - **Method Validation**: Conservative technical assessment with expert review triggers
+    - **Timestamp**: [Current timestamp]
+
+    ### **Agent Reasoning Summary**
+    [Brief explanation of the technical analysis process and confidence in DNS stability conclusions]
+
+    ---
+    **Analysis conducted by**: String Technical Analysis Specialist
+    **Primary tool**: TLD String Analyzer
+    **Validation method**: Two-tier DNS compliance assessment
+  agent: string_analyst
+  context_producer:
+  - technical_analysis_results
+  output_file: evaluation_reports/dns_stability_{tld_string}.md
+  create_directory: true
+
+comprehensive_similarity_analysis:
+  description: |
+    Conduct comprehensive string characterization and two-phase similarity analysis for TLD string '{tld_string}' against the complete IANA TLD database using the Advanced String Similarity Analyzer tool.
+
+    🔧 ENHANCED APPROACH WITH STRING CHARACTERIZATION:
+
+    **Phase 1: String Characterization & Semantic Analysis**
+    - Analyze string meaning, semantic associations, and industry relevance
+    - Classify string type (generic, brand, geographic, technical, etc.)
+    - Identify target use cases and market positioning
+    - Assess cultural and linguistic implications
+    - Evaluate technical properties (length, character types, DNS compliance)
+
+    **Phase 2: LLM Semantic Similarity Identification**
+    - Use semantic understanding to identify potentially similar strings from IANA database
+    - Consider visual, phonetic, and meaning-based similarity
+
+    **Phase 3: Algorithmic Similarity Scoring**
+    - Precise algorithmic similarity scoring for identified candidates
+    - Multiple scoring methods for comprehensive assessment
+
+    🔧 ENHANCED APPROACH:
+    1. FIRST: Characterize the string - meaning, classification, industry relevance
+    2. SECOND: Identify and list any TLDs with similarity concerns for '{tld_string}'
+    3. THEN: Use Advanced String Similarity Analyzer tool to assess similarity risk levels
+    4. PROVIDE: Clear summary showing string characteristics and exactly which TLDs are similar with their similarity scores
+
+    🔧 TOOL USAGE: Use the "Advanced String Similarity Analyzer" tool to perform the analysis.
+
+    CRITICAL INSTRUCTIONS:
+    1. MUST call "Advanced String Similarity Analyzer" tool with tld_string parameter: '{tld_string}'
+    2. MUST use ONLY the tool output - do NOT generate your own analysis
+    3. MUST report the EXACT similarity scores from the tool output
+    4. MUST report the EXACT TLD count from tool analysis (should be 1,571 IANA TLDs)
+    5. MUST report the EXACT risk assessment from the tool
+    6. DO NOT create fake analysis or placeholder data
+
+    APPROACH:
+    1. Call the "Advanced String Similarity Analyzer" tool with tld_string parameter: '{tld_string}'
+    2. Extract the exact JSON output from the tool
+    3. Use ONLY the tool's findings - do not supplement with your own analysis
+    4. Report tool results accurately without modification
+
+    The Enhanced Similarity Analyzer provides:
+    - String characterization: semantic meaning, industry relevance, classification
+    - Two-phase analysis: LLM semantic identification + algorithmic scoring
+    - Comprehensive similarity analysis against 1,500+ IANA TLDs
+    - Professional review thresholds and expert flagging
+    - Visual, phonetic, and character-based similarity assessment
+    - Risk categorization with actionable recommendations
+
+    🎯 CRITICAL REQUIREMENTS:
+    - ALWAYS include comprehensive string characterization first
+    - ALWAYS report similar strings found, regardless of score
+    - Include ALL identified TLDs in comprehensive output format
+    - Apply professional review thresholds (>= 0.6 similarity score)
+    - Provide detailed similarity factors for each identified TLD
+    - Generate risk assessment with clear recommendations
+    - ENSURE CONSISTENCY: If TLDs are flagged for visual similarities (substring relationships, character overlap), these MUST be reflected in the Visual Similarity Analysis section, not dismissed
+
+    SIMILARITY ANALYSIS FOCUS:
+  expected_output: |
+    # 👁️ String Characterization & Comprehensive Similarity Analysis: .{tld_string}
+
+    **STATUS:** ✅ PASS / ⚠️ REVIEW REQUIRED / ❌ BLOCKED
+
+    ## **🔍 ANALYSIS APPROACH**
+
+    ### **Phase 1: String Characterization & Context Analysis**
+    I began by analyzing the semantic meaning and classification of "{tld_string}" to understand its intended use and market positioning. This contextual understanding guides the similarity analysis by helping identify which existing TLDs would be most likely to cause confusion.
+
+    **My Assessment Process:**
+    1. **Semantic Analysis**: Analyzed the word meaning, associations, and connotations
+    2. **Industry Classification**: Determined target market and use case category
+    3. **Cultural Context**: Considered cultural and linguistic implications
+    4. **Technical Properties**: Evaluated DNS compliance and technical characteristics
+
+    ### **Phase 2: Intelligent Candidate Identification**
+    Using the Advanced String Similarity Analyzer, I applied LLM reasoning to identify potentially similar TLDs from the complete IANA database of 1,500+ TLDs. This approach is far more efficient than brute-force comparison.
+
+    **My Reasoning Process:**
+    - **Visual Similarity**: Looked for TLDs with similar character patterns, confusable letters
+    - **Phonetic Similarity**: Identified TLDs that sound similar when spoken
+    - **Semantic Relationships**: Found TLDs with related meanings or associations
+    - **Typo Vulnerability**: Identified TLDs that could result from common typing errors
+
+    ### **Phase 3: Precise Similarity Scoring**
+    For each identified candidate, I calculated comprehensive similarity scores using multiple algorithms weighted for domain name evaluation.
+
+    ## **🔍 STRING CHARACTERIZATION RESULTS**
+
+    ### **Semantic Analysis of "{tld_string}"**
+    - **Primary Meaning**: [Detailed explanation of what the word means and its associations]
+    - **String Type**: [Generic/Brand/Geographic/Technical/Industry-Specific]
+    - **Industry Relevance**: [Specific industries and use cases where this would be valuable]
+    - **Cultural/Linguistic Notes**: [Any cultural or linguistic considerations identified]
+    - **Market Positioning**: [Target audience and anticipated use case scenarios]
+
+    ### **Technical Properties Assessment**
+    - **Length**: [X] characters (✅ Compliant: 3-63 character range)
+    - **Character Types**: [alphabetic/numeric/hyphen analysis]
+    - **DNS Compliance**: ✅ COMPLIANT / ⚠️ REVIEW REQUIRED / ❌ NON-COMPLIANT
+    - **Technical Classification**: [Consumer-facing/B2B/Technical/Specialized]
+
+    ## **📊 SIMILARITY ANALYSIS FINDINGS**
+
+    ### **Database Analysis Results**
+    - **IANA Database Status**: ✅ FRESH DATA USED (MUST show this if tool loaded 1,571 TLDs)
+    - **Total TLDs in Database**: [Report EXACT number from tool - should be 1,571] active TLDs analyzed
+    - **Tool Output Verification**: MUST match Advanced String Similarity Analyzer exact output
+    - **Initial Candidate Pool**: [XX] TLDs identified through semantic filtering
+    - **Final Analysis Set**: [XX] TLDs requiring detailed similarity scoring
+    - **Critical Check**: If showing 270 or other wrong number, DO NOT USE - call tool again
+
+    ### **Detailed Similarity Findings**
+
+    **🚩 FLAGGED TLDS WITH SIMILARITY CONCERNS**
+
+    CRITICAL: Use EXACT data from Advanced String Similarity Analyzer tool output.
+    If tool found similarities (like xxxx→xxx with 0.925 score), MUST report them exactly.
+    DO NOT report "no similarities" if tool found similarities.
+
+    [For each similarity found by the tool, report exactly:]
+
+    **1. .[similar_tld_name]** - Similarity Score: [EXACT score from tool] - Risk Level: [EXACT risk from tool]
+    - **Why This TLD Was Flagged**: [Specific reasoning for why it's similar]
+    - **Similarity Factors**: [Same first character, visual confusability, phonetic similarity, etc.]
+    - **Confusion Risk**: [Explanation of how users might confuse these TLDs]
+    - **Professional Concern**: [Yes/No] - [Reasoning for professional review requirement]
+    - **Mitigation Needed**: [Specific actions to address this similarity]
+
+    **2. .{tld_string}** - Similarity Score: [0.XXX] - Risk Level: [MINIMAL/LOW/MEDIUM/HIGH/CRITICAL]
+    - **Why This TLD Was Flagged**: [Specific reasoning for why it's similar]
+    - **Similarity Factors**: [Visual confusability, substring relationship, etc.]
+    - **Confusion Risk**: [Explanation of how users might confuse these TLDs]
+    - **Professional Concern**: [Yes/No] - [Reasoning for professional review requirement]
+    - **Mitigation Needed**: [Specific actions to address this similarity]
+
+    [Continue for ALL identified TLDs, or state:]
+    **✅ No Similar TLDs Identified Above Risk Threshold**
+    After comprehensive analysis of [XXXX] TLDs in the IANA database, no existing TLDs were identified with similarity scores above the 0.4 threshold that would require professional review.
+
+    ## **🔍 COMPREHENSIVE SIMILARITY BREAKDOWN**
+
+    **CRITICAL CONSISTENCY REQUIREMENT**: The following breakdown sections MUST be consistent with and reference the flagged TLD findings above. If TLDs were flagged for "substring relationship" or other visual similarities, these MUST be mentioned and analyzed in the corresponding sections below. DO NOT dismiss findings that were already identified above.
+
+    ### **Visual Similarity Analysis**
+    **Method**: Character-by-character visual comparison, substring detection, font confusability assessment
+    **Findings**: [Must be consistent with flagged TLD findings above - if substring relationships were identified in flagged TLDs, they must be mentioned here]
+    - **Substring Relationships**: [If any flagged TLDs show "substring relationship", report them here with specific details]
+    - **Character Overlap**: [Percentage of shared characters for flagged TLDs]
+    - **Character Confusability**: [Analysis of visually similar characters like o/0, l/1/i, plus any character overlap from flagged TLDs]
+    - **Positional Analysis**: [Letter order preservation and positional matching for flagged TLDs]
+    - **Font-Based Confusion**: [Assessment of how different fonts might cause confusion]
+    - **Visual Risk Score**: [Must reflect any visual similarity concerns identified in flagged TLDs section]
+
+    ### **Phonetic Similarity Analysis**
+    **Method**: Pronunciation pattern analysis, sound-alike detection
+    **Findings**: [Detailed findings about phonetic similarity]
+    - **Pronunciation Conflicts**: [Analysis of how the TLD sounds when spoken]
+    - **Language-Specific Issues**: [Different pronunciation in various languages]
+    - **Phonetic Risk Score**: [X.XX] - [Explanation of score]
+
+    ### **Character-Based Analysis**
+    **Method**: Edit distance calculation, substring matching, typo vulnerability
+    **Findings**: [Detailed findings about character-level similarity]
+    - **Edit Distance Results**: [Analysis of minimum character changes needed]
+    - **Substring Relationships**: [Whether one TLD contains the other]
+    - **Typo Vulnerability**: [Common typing errors that could cause confusion]
+    - **Character Risk Score**: [X.XX] - [Explanation of score]
+
+    ## **⚠️ PROFESSIONAL REVIEW TRIGGERS**
+
+    ### **High Similarity Concerns (≥0.8)**
+    [List TLDs requiring immediate expert review or state "None identified"]
+    **Reasoning**: [Explanation of why these trigger expert review]
+
+    ### **Medium Similarity Concerns (≥0.6)**
+    [List TLDs requiring professional assessment or state "None identified"]
+    **Reasoning**: [Explanation of why these require professional review]
+
+    ### **Visual Confusability Concerns**
+    [MUST include any TLDs flagged above for "substring relationship", character overlap, or visual similarities. DO NOT state "None identified" if TLDs were flagged for visual similarity factors above.]
+    **Reasoning**: [Reference specific visual similarity factors from flagged TLDs section - substring relationships, character overlap, etc.]
+
+    ### **Market Confusion Risk**
+    [List TLDs likely to cause consumer confusion or state "None identified"]
+    **Reasoning**: [Explanation of market confusion potential]
+
+    ## **🛡️ RISK MITIGATION RECOMMENDATIONS**
+
+    ### **Immediate Actions Required**
+    [Specific actionable recommendations based on findings, or state "None required"]
+
+    ### **Monitoring Requirements**
+    [Ongoing monitoring recommendations or state "Standard monitoring sufficient"]
+
+    ### **Legal Considerations**
+    [Legal review recommendations or state "No additional legal review required"]
+
+    ## **📈 OVERALL ASSESSMENT**
+
+    ### **Risk Level Determination**
+    - **Overall Similarity Risk**: ✅ CLEAR / ⚠️ LOW RISK / 🔶 MEDIUM RISK / 🔴 HIGH RISK / ❌ CRITICAL
+    - **Highest Similarity Score**: [0.XX] (Professional Review Threshold: ≥0.6)
+    - **Professional Review Required**: Yes/No
+    - **Expert Review Flagged**: Yes/No
+
+    ### **My Recommendation**
+    **PROCEED / PROCEED WITH CAUTION / EXPERT REVIEW REQUIRED / BLOCKED**
+
+    **Reasoning**: [Detailed explanation of recommendation based on all findings]
+
+    ### **Key Risk Factors Identified**
+    [Primary similarity concerns or state "No significant risk factors identified"]
+
+    ### **Next Steps**
+    [Specific actions recommended for moving forward]
+
+    ## **🔧 TECHNICAL METHODOLOGY & CONFIDENCE**
+
+    ### **Analysis Method**
+    - **Approach**: Two-phase LLM semantic identification + multi-algorithm scoring
+    - **Algorithms Used**: Edit distance, prefix similarity, visual scoring, phonetic analysis
+    - **Database Coverage**: [XXXX] TLDs from IANA root zone database
+    - **Candidate Efficiency**: 94%+ efficiency improvement over brute-force analysis
+
+    ### **Confidence Assessment**
+    - **Analysis Confidence**: High/Medium/Low
+    - **Data Quality**: ✅ FRESH IANA DATA / ⚠️ FALLBACK DATA
+    - **Method Validation**: Enhanced LLM reasoning + algorithmic validation
+    - **Timestamp**: [Current timestamp]
+
+    ### **Agent Reasoning Summary**
+    [Brief explanation of the analytical process and confidence in conclusions]
+
+    ---
+    **Analysis conducted by**: String Analysis Specialist
+    **Tool used**: Advanced String Similarity Analyzer
+    **Validation method**: Two-phase LLM + algorithmic approach
+  agent: string_analyst
+  context_consumer:
+  - validation_results
+  context_producer:
+  - technical_analysis_results
+  output_file: evaluation_reports/similarity_analysis_{tld_string}.md
+  create_directory: true
+
+name_collision_assessment:
+  description: |
+    Conduct comprehensive name collision analysis for TLD string '{tld_string}' using magnitude data and collision detection tools.
+
+    🔧 ENHANCED APPROACH:
+    1. FIRST: Identify and list any TLDs with magnitude collision data for '{tld_string}'
+    2. THEN: Use Magnitude Collision Analyzer tool to assess collision risk levels
+    3. PROVIDE: Clear summary showing exactly which TLDs have collision concerns and their risk scores
+
+    🔧 TOOL USAGE: Use the "Magnitude Collision Analyzer" tool to perform the analysis.
+
+    COLLISION ANALYSIS APPROACH:
+    1. Call the "Magnitude Collision Analyzer" tool with the tld_string parameter: '{tld_string}'
+    2. The tool checks against the comprehensive magnitude database for collision patterns
+    3. Extract collision risk scores, similar TLD identification, and risk assessment
+    4. Format the results to clearly show which specific TLDs are causing collision concerns
+
+    The Magnitude Collision Analyzer provides:
+    - Collision risk assessment against existing TLD database
+    - Magnitude scoring and threshold analysis
+    - Similar TLD identification with collision potential
+    - Risk categorization and mitigation recommendations
+
+    📝 MARKDOWN OUTPUT INSTRUCTIONS:
+    Format your analysis as a comprehensive markdown report with:
+    - Clear heading with the TLD string
+    - **FLAGGED TLDS SECTION**: List specific TLDs causing collision concerns with their risk scores
+    - Collision risk assessment and magnitude scoring
+    - Risk categorization and recommendations
+    - Use markdown headers (##, ###), bullets, and formatting for clarity
+  expected_output: |
+    # ⚡ Name Collision Assessment: .{tld_string}
+
+    **STATUS:** ✅ CLEAR / ⚠️ LOW RISK / 🔶 MEDIUM RISK / 🔴 HIGH RISK / ❌ CRITICAL
+
+    ## **🔍 ANALYSIS APPROACH**
+
+    ### **Magnitude Collision Analysis Methodology**
+    I conducted a comprehensive name collision assessment using ICANN's magnitude database to evaluate the risk of DNS query collisions between the proposed TLD ".{tld_string}" and existing infrastructure.
+
+    **My Assessment Process:**
+    1. **Database Query**: Searched ICANN's magnitude collision database for matches
+    2. **Risk Scoring**: Applied industry-standard 8.0 critical threshold for collision risk
+    3. **Impact Analysis**: Evaluated potential impact on existing DNS infrastructure
+    4. **Mitigation Assessment**: Determined if collision mitigation measures are required
+
+    ### **Tools and Data Sources Used**
+    - **Magnitude Collision Analyzer**: Primary tool for collision risk assessment
+    - **ICANN Magnitude Database**: Official source for DNS collision data
+    - **Historical Precedent Database**: Previous collision cases and resolution patterns
+    - **DNS Infrastructure Analysis**: Assessment of potential impact on existing systems
+
+    ## **📊 COLLISION RISK ASSESSMENT RESULTS**
+
+    ### **Overall Collision Risk Summary**
+    - **Final Risk Level**: ✅ CLEAR / ⚠️ LOW RISK / 🔶 MEDIUM RISK / 🔴 HIGH RISK / ❌ CRITICAL
+    - **Magnitude Risk Score**: [X.X] (Critical Threshold: ≥8.0)
+    - **Expert Review Required**: Yes/No
+    - **Collision Mitigation Required**: Yes/No
+    - **ICANN Application Impact**: [No impact/Minor considerations/Significant requirements]
+
+    ### **Database Analysis Results**
+    - **Database Status**: ✅ LIVE DATA / ⚠️ CACHED DATA / ❌ DATA ERROR
+    - **Total TLDs Analyzed**: [Number] TLDs in collision database
+    - **Query Execution**: [Successful/Partial/Failed]
+    - **Data Currency**: [Current/Recent/Outdated]
+
+    ## **🚩 COLLISION FINDINGS**
+
+    ### **TLDs with Collision Concerns**
+
+    [If collisions found, list each with detailed analysis:]
+
+    **1. .{tld_string}** - Collision Score: [X.X] - Risk Level: [CLEAR/LOW/MEDIUM/HIGH/CRITICAL]
+    - **Why This Collision Occurs**: [Specific explanation of collision mechanism]
+    - **Collision Factors**: [DNS query patterns, infrastructure overlap, etc.]
+    - **Impact Assessment**: [Potential disruption to existing services]
+    - **Historical Precedent**: [Similar cases and their resolution]
+    - **Mitigation Required**: [Yes/No] - [Specific mitigation measures needed]
+
+    **2. .{tld_string}** - Collision Score: [X.X] - Risk Level: [CLEAR/LOW/MEDIUM/HIGH/CRITICAL]
+    - **Why This Collision Occurs**: [Specific explanation of collision mechanism]
+    - **Collision Factors**: [DNS query patterns, infrastructure overlap, etc.]
+    - **Impact Assessment**: [Potential disruption to existing services]
+    - **Historical Precedent**: [Similar cases and their resolution]
+    - **Mitigation Required**: [Yes/No] - [Specific mitigation measures needed]
+
+    [Continue for all TLDs with collision concerns, or state:]
+    **✅ No Collision Concerns Identified**
+    After comprehensive analysis of the magnitude database, no existing TLDs were identified with collision scores above the 2.0 threshold that would require mitigation measures.
+
+    ## **🔍 DETAILED COLLISION ANALYSIS**
+
+    ### **Magnitude Database Assessment**
+    - **Database Coverage**: [Comprehensive/Partial/Limited]
+    - **Analysis Completeness**: [Complete/Partial/Interrupted]
+    - **Data Reliability**: [High/Medium/Low]
+    - **Query Performance**: [Successful execution within normal parameters]
+
+    ### **Risk Categorization by Threshold**
+
+    **Critical Risk (≥8.0 - Immediate Expert Review Required)**
+    - **TLDs Identified**: [List critical risk TLDs or state "None identified"]
+    - **Impact**: [Severe disruption to existing DNS infrastructure]
+    - **Action Required**: [Immediate mitigation planning required]
+
+    **High Risk (6.0-7.9 - Expert Review Recommended)**
+    - **TLDs Identified**: [List high risk TLDs or state "None identified"]
+    - **Impact**: [Significant potential for service disruption]
+    - **Action Required**: [Mitigation planning recommended]
+
+    **Medium Risk (4.0-5.9 - Professional Review)**
+    - **TLDs Identified**: [List medium risk TLDs or state "None identified"]
+    - **Impact**: [Moderate potential for service disruption]
+    - **Action Required**: [Monitoring and potential mitigation]
+
+    **Low Risk (2.0-3.9 - Standard Monitoring)**
+    - **TLDs Identified**: [List low risk TLDs or state "None identified"]
+    - **Impact**: [Minor potential for service disruption]
+    - **Action Required**: [Standard monitoring protocols]
+
+    **Clear (<2.0 - No Action Required)**
+    - **TLDs Identified**: [List clear TLDs or state "All others"]
+    - **Impact**: [No significant collision risk identified]
+    - **Action Required**: [No mitigation required]
+
+    ## **⚠️ COLLISION RISK FACTORS ANALYSIS**
+
+    ### **Technical Risk Factors**
+    [List specific technical factors contributing to collision risk or state "None identified"]
+
+    ### **Infrastructure Impact Assessment**
+    [Detailed analysis of potential impact on existing DNS infrastructure]
+
+    ### **Historical Context**
+    [Reference to similar collision cases and their resolution patterns]
+
+    ## **🛡️ MITIGATION RECOMMENDATIONS**
+
+    ### **Immediate Mitigation Requirements**
+    [Specific recommendations for addressing collision concerns or state "None required"]
+
+    ### **Long-term Monitoring Strategy**
+    [Ongoing monitoring recommendations or state "Standard monitoring sufficient"]
+
+    ### **Stakeholder Communication**
+    [Communication requirements with affected parties or state "None required"]
+
+    ## **📈 EXPERT REVIEW TRIGGERS**
+
+    ### **High Magnitude Score Trigger**
+    - **Triggered**: [Yes/No] (Threshold: ≥6.0)
+    - **Reason**: [Explanation if triggered]
+    - **Required Action**: [Specific expert review requirements]
+
+    ### **Multiple Collision TLDs Trigger**
+    - **Triggered**: [Yes/No] (Threshold: ≥3 flagged TLDs)
+    - **Count**: [Number of TLDs with collision concerns]
+    - **Required Action**: [Comprehensive collision assessment needed]
+
+    ### **Critical Threshold Exceeded Trigger**
+    - **Triggered**: [Yes/No] (Threshold: ≥8.0)
+    - **Highest Score**: [Highest collision score found]
+    - **Required Action**: [Immediate expert intervention required]
+
+    ## **📋 COLLISION MANAGEMENT PLAN**
+
+    ### **Pre-Delegation Requirements**
+    [Actions required before TLD delegation or state "None required"]
+
+    ### **Post-Delegation Monitoring**
+    [Ongoing monitoring requirements or state "Standard monitoring"]
+
+    ### **Contingency Planning**
+    [Contingency measures for unexpected collisions or state "None required"]
+
+    ## **🔧 TECHNICAL METHODOLOGY & CONFIDENCE**
+
+    ### **Analysis Method**
+    - **Primary Tool**: Magnitude Collision Analyzer
+    - **Database**: ICANN DNS Magnitude Database
+    - **Methodology**: Industry-standard collision risk assessment
+    - **Threshold Application**: 8.0 critical threshold (ICANN standard)
+
+    ### **Data Sources**
+    - **Primary**: ICANN DNS Magnitude Database
+    - **Secondary**: Historical Precedent Database
+    - **Validation**: DNS infrastructure analysis
+    - **Currency**: [Data collection timestamp]
+
+    ### **Confidence Assessment**
+    - **Analysis Confidence**: High/Medium/Low
+    - **Data Quality**: ✅ AUTHORITATIVE SOURCES / ⚠️ PARTIAL DATA
+    - **Method Validation**: Industry-standard magnitude analysis
+    - **Timestamp**: [Current timestamp]
+
+    ### **Agent Reasoning Summary**
+    [Brief explanation of the collision analysis process and confidence in conclusions]
+
+    ---
+    **Analysis conducted by**: Name Collision Risk Gatekeeper
+    **Primary tool**: Magnitude Collision Analyzer
+    **Validation method**: ICANN magnitude database analysis
+  agent: collision_analyst
+  context_consumer:
+  - similarity_results
+  context_producer:
+  - technical_analysis_results
+  output_file: evaluation_reports/collision_assessment_{tld_string}.md
+  create_directory: true
+
+technical_gut_check:
+  description: |
+    Quick sanity check of technical analysis results for {tld_string}.
+    Review outputs for basic logic, consistency, and completeness.
+  expected_output: |
+    Technical Gut Check for {tld_string}:
+
+    OUTPUTS REVIEWED: DNS Stability, Similarity Analysis, Collision Assessment
+    LOGIC CHECK: [Pass/Fail] - Do the findings make logical sense?
+    CONSISTENCY CHECK: [Pass/Fail] - Are the conclusions consistent with evidence?
+    COMPLETENESS CHECK: [Pass/Fail] - Are all required elements present?
+
+    ISSUES FOUND: [List any obvious problems or "None"]
+    OVERALL STATUS: [Ready for Report/Needs Review]
+  agent: string_analyst
+  output_file: evaluation_reports/technical_validation_{tld_string}.md
+  create_directory: true
+
+
+# ---- LEGAL RISK ASSESSMENT ----------------------------------------------
+
+deep_research_legal_assessment:
+  description: |
+    Conduct comprehensive legal and intellectual property risk research for '{tld_string}'
+    using the Deep Research Legal Analyzer tool. This single tool call covers trademarks,
+    patents, and broader IP risks with cited web sources.
+
+    Call the "Deep Research Legal Analyzer" with the TLD string, then analyze the returned report.
+    Organize findings by: trademark conflicts (by jurisdiction), patent conflicts, and broader legal risks.
+
+    CRITICAL — TRADEMARK ANALYSIS NUANCE:
+    A word matching the TLD string is NOT, by itself, a meaningful conflict. When analyzing each
+    trademark hit, evaluate the REALISTIC likelihood that it would actually pose a problem for
+    the gTLD application, not just whether the text matches. For every match, weigh:
+      - Is the holder an active, operating business (not defunct or dissolved)?
+      - Does the holder operate in technology, internet, DNS, software, digital services, or
+        online commerce — i.e., a space where a TLD would plausibly cause confusion or harm?
+      - Do the Nice classes overlap with DNS/internet-relevant ones (9, 35, 38, 41, 42)?
+      - Is the mark famous or commercially used, or obscure/defensively parked?
+      - Does the holder have any trademark enforcement or LRO/UDRP history?
+      - Is the match identical, or merely similar/partial/phonetic?
+
+    Flag STRONG conflicts (and overall HIGH/CRITICAL risk) for matches held by active, relevant,
+    enforcing holders. Flag MEDIUM conflicts for active holders with a plausible but less obvious
+    reason to object — these should still contribute to a MEDIUM or HIGH overall rating,
+    especially if multiple MEDIUM matches exist. Classify as WEAK (and exclude from the overall
+    rating) any pure textual matches held by defunct entities, clearly unrelated industries, or
+    abandoned registrations.
+
+    The objective is to avoid over-flagging meaningless word matches while still catching every
+    genuine risk. When in doubt between two adjacent levels, choose the more conservative one
+    and explain why. Classify the overall legal risk level and identify the most concerning issues,
+    explicitly citing the qualitative factors (not just the count of matches) that drove the rating.
+  expected_output: |
+    # Deep Research Legal Assessment: .{tld_string}
+
+    **STATUS:** LOW RISK / MEDIUM RISK / HIGH RISK / CRITICAL
+
+    ## RESEARCH METHODOLOGY
+    - **Research Tool**: Gemini Deep Research Legal Analyzer
+    - **Sources Searched**: USPTO, EUIPO, WIPO trademark databases; USPTO patents; web legal sources
+    - **Research Duration**: [duration from tool response]
+    - **Sources Cited**: [count from tool response]
+
+    ## TRADEMARK CONFLICT ANALYSIS
+
+    ### Overall Trademark Risk
+    - **Risk Level**: [LOW/MEDIUM/HIGH/CRITICAL]
+    - **Total Conflicts Identified**: [count]
+    - **Strongest Conflict Level**: [STRONG/MEDIUM/WEAK/NONE]
+
+    ### USPTO (United States)
+    - **Conflicts Found**: [count and details]
+    - **Strength Distribution**: [STRONG/MEDIUM/WEAK counts]
+
+    ### EUIPO (European Union)
+    - **Conflicts Found**: [count and details]
+    - **Strength Distribution**: [STRONG/MEDIUM/WEAK counts]
+
+    ### WIPO (International)
+    - **Conflicts Found**: [count and details]
+    - **Strength Distribution**: [STRONG/MEDIUM/WEAK counts]
+
+    ### Key Trademark Conflicts (if any)
+    [For each significant conflict: trademark name, registration number, jurisdiction, status, risk assessment]
+
+    ## PATENT CONFLICT ANALYSIS
+
+    ### Overall Patent Risk
+    - **Risk Level**: [LOW/MEDIUM/HIGH]
+    - **Relevant Patents Found**: [count]
+
+    ### Key Patent Concerns (if any)
+    [For each relevant patent: title, number, assignee, relevance to TLD]
+
+    ## BROADER LEGAL RISKS
+    - **UDRP/Domain Litigation History**: [findings]
+    - **Known Brand Associations**: [findings]
+    - **Regulatory/Government Concerns**: [findings]
+
+    ## ICANN-SPECIFIC RISK ASSESSMENT
+    - **Legal Rights Objection Risk**: [LOW/MEDIUM/HIGH]
+    - **Opposition Probability**: [assessment]
+    - **Rights Protection Adequacy**: [Sunrise/Claims sufficient or not]
+    - **Precedents from Previous Rounds**: [findings]
+
+    ## RISK MITIGATION STRATEGIES
+    1. [First recommended action]
+    2. [Second recommended action]
+    3. [Additional actions as needed]
+
+    ## CITED SOURCES
+    [List all sources with URLs from the deep research report]
+
+    ## CONFIDENCE ASSESSMENT
+    - **Research Completeness**: [HIGH/MEDIUM/LOW]
+    - **Data Quality**: AUTHORITATIVE WEB SOURCES / PARTIAL DATA
+    - **Analysis Method**: Gemini Deep Research with autonomous web search
+  agent: trademark_specialist
+  context_consumer:
+  - similarity_analysis_results
+  context_producer:
+  - trademark_conflicts
+  - patent_risk_factors
+  - legal_risk_assessment
+  output_file: evaluation_reports/legal_research_{tld_string}.md
+  create_directory: true
+
+legal_risk_validation:
+  description: |
+    Validate and synthesize legal risk assessment results for TLD string '{tld_string}'.
+
+    🔧 VALIDATION MISSION:
+    - Verify trademark conflict analysis accuracy across jurisdictions
+    - Cross-reference trademark findings against available databases
+    - Validate legal risk scoring and assessment methodology
+    - Provide final legal risk determination with confidence assessment
+    - Identify any gaps or inconsistencies in legal analysis
+
+    🔧 VALIDATION APPROACH:
+    1. Use trademark analyzer to spot-check key findings
+    2. Validate risk categorization and legal assessment logic
+    3. Cross-reference against trademark precedent patterns
+    4. Assess completeness of multi-jurisdictional analysis
+    5. Consult ICANN New gTLD Program Applicant Guidebook for trademark-related policies
+
+    🔧 TOOL USAGE:
+    - Use "ICANN New gTLD Program Applicant Guidebook Search" to reference official ICANN guidance on trademark evaluation
+    - Search for relevant sections like "Rights Protection", "Trademark Clearinghouse", "Objection Procedures"
+
+    FOCUS: Ensure legal risk assessment is thorough and risk categorization is appropriate.
+  expected_output: |
+    # ✅ Legal Risk Validation: .{tld_string}
+
+    ## **🎯 OVERALL LEGAL RISK ASSESSMENT**
+    - **Legal Risk Level**: [Low/Medium/High/Critical]
+    - **Validation Confidence**: [High/Medium/Low]
+    - **Legal Analysis Status**: ✅ VALIDATED / ⚠️ DISCREPANCIES / ❌ ISSUES FOUND
+    - **Legal Review Required**: Yes/No
+
+    ## **⚖️ LEGAL VALIDATION RESULTS**
+
+    ### **🏛️ Global Trademark Assessment Validation**
+    - **Agent Assessment**: [Risk level from trademark analysis]
+    - **Independent Verification**: [✅ CONFIRMED / ❌ DISCREPANCY / ⚠️ NEEDS REVIEW]
+    - **USPTO Conflicts**: [Validated findings or "None confirmed"]
+    - **EUIPO Conflicts**: [Validated findings or "None confirmed"]
+    - **WIPO Conflicts**: [Validated findings or "None confirmed"]
+
+    ### **📊 Risk Categorization Validation**
+    - **Trademark Similarity Threshold**: [Confirmed threshold application]
+    - **Risk Score Validation**: [1-5 validated risk score]
+    - **Multi-Jurisdictional Coverage**: [✅ COMPLETE / ⚠️ GAPS IDENTIFIED]
+
+    ## **⚠️ LEGAL RISK FACTORS**
+    - **Confirmed Trademark Conflicts**: [List confirmed conflicts or "None identified"]
+    - **High-Risk Jurisdictions**: [List jurisdictions with concerns or "None identified"]
+    - **Legal Review Triggers**: [List triggers or "None activated"]
+
+    ## **⚠️ VALIDATION DISCREPANCIES**
+    [List any discrepancies between agent findings and validation, or "None identified"]
+
+    ## **🛡️ LEGAL RISK MITIGATION**
+    - **Trademark Clearance Required**: [Yes/No]
+    - **Legal Counsel Consultation**: [Recommended/Required/Not needed]
+    - **Defensive Strategies**: [List recommended strategies or "None required"]
+
+    ## **📈 NEXT STEPS**
+    - **Legal Risk Status**: [ACCEPTABLE/NEEDS MITIGATION/REQUIRES LEGAL REVIEW]
+    - **Recommended Actions**: [Specific legal next steps]
+
+    ## **🔧 VALIDATION DETAILS**
+    - **Validation Tools Used**: Trademark Analyzer, Legal Database Access, ICANN Guidebook
+    - **Data Sources**: USPTO, EUIPO, WIPO databases
+    - **Guidebook Sections Referenced**: [List relevant sections]
+    - **Validation Timestamp**: [Current timestamp]
+    - **Validator**: Data Validation & Fact-Checking Specialist
+  agent: trademark_specialist
+  context_consumer:
+  - risk_factors
+  context_producer:
+  - legal_validation_results
+  output_file: evaluation_reports/legal_validation_{tld_string}.md
+  create_directory: true
+
+legal_gut_check:
+  description: |
+    Quick sanity check of legal analysis results for {tld_string}.
+    Review outputs for basic logic, consistency, and completeness.
+  expected_output: |
+    Legal Gut Check for {tld_string}:
+
+    OUTPUTS REVIEWED: Trademark Assessment, Patent Analysis
+    LOGIC CHECK: [Pass/Fail] - Do the findings make logical sense?
+    CONSISTENCY CHECK: [Pass/Fail] - Are the conclusions consistent with evidence?
+    COMPLETENESS CHECK: [Pass/Fail] - Are all required elements present?
+
+    ISSUES FOUND: [List any obvious problems or "None"]
+    OVERALL STATUS: [Ready for Report/Needs Review]
+  agent: trademark_specialist
+  output_file: evaluation_reports/legal_review_{tld_string}.md
+  create_directory: true
+
+
+# ---- POLICY SAFEGUARD REVIEW --------------------------------------------
+
+geographic_name_assessment:
+  description: |
+    Determine whether TLD string '{tld_string}' represents a geographic location requiring government approval with structured classification.
+
+    GEOGRAPHIC NAME EVALUATION:
+    Assess if string represents any of these ICANN-defined geographic categories:
+
+    **Type 1 - Country/Territory Names:**
+    - Exact matches to ISO 3166-1 country names (short/long form, English/local language)
+    - Territory names from ISO 3166-1 list
+    - Permutations (spaces removed, punctuation, articles like "the")
+
+    **Type 2 - Capital Cities:**
+    - Capital cities listed in ISO 3166-1
+    - Major administrative centers
+
+    **Type 3 - City Names:**
+    - Where applicant declares intent to use TLD for city-associated purposes
+    - Clear from application statements that TLD primarily for city name purposes
+    - String matches official city documents
+
+    **Type 4 - Sub-national Places:**
+    - Counties, provinces, states from ISO 3166-2
+    - UNESCO regions (Africa, Arab States, Asia-Pacific, Europe-North America, Latin America-Caribbean)
+    - UN M49 geographic regions
+
+    **Translation & Variant Analysis:**
+    - Check major language translations and transliterations
+    - Consider cultural name variations and historical designations
+    - Assess phonetic similarities in major languages
+
+    **Government Approval Assessment:**
+    If geographic name identified, determine:
+    - Which government authorities would be relevant
+    - Whether support/non-objection documentation required
+    - Special requirements (60% rule for regions, multiple jurisdictions)
+
+    🔧 **ENHANCED TOOL USAGE**:
+    - Use "ICANN New gTLD Program Applicant Guidebook Search" to reference official ICANN guidance on geographic names
+    - Search for relevant sections like "Geographic Names", "Country Names", "Government Approval", "ISO 3166"
+    - Use "Web Search for GAC Risk Analysis" to search for recent political developments (search terms like "TLD geographic concerns", "TLD government approval", "TLD political sensitivity")
+    - Search for recent news about territorial disputes, government changes, or political sensitivities related to the string
+    - Use "Advanced String Similarity Analyzer" results to identify similar geographic names that might cause confusion
+
+    **ENHANCED APPROACH**:
+    - **Conservative Assessment**: When uncertain about geographic classification, flag for expert review
+    - **Recent Events Integration**: Use web search to identify current political developments affecting geographic names
+    - **Similarity Context**: Reference similarity analysis to understand potential confusion with existing geographic TLDs
+
+    Apply conservative assessment - when uncertain, flag for expert review.
+  expected_output: |
+    Geographic Name Assessment with STRUCTURED CLASSIFICATION:
+
+    ## Geographic Classification
+    - **Is Geographic Name**: YES/NO/UNCERTAIN
+    - **Geographic Type**: [Country/Territory/Capital/City/Sub-national/Region/None]
+    - **Confidence Level**: [HIGH/MEDIUM/LOW]
+    - **Specific Matches**: [List any identified geographic entities]
+
+    ## Translation Analysis
+    ```json
+    "language_variants": {
+        "en_variant": "[variant or none]",
+        "french": "[variant or none]",
+        "spanish": "[variant or none]",
+        "arabic": "[variant or none]",
+        "chinese": "[variant or none]",
+        "russian": "[variant or none]"
+    }
+    ```
+
+    ## Government Approval Requirements
+    - **Documentation Required**: YES/NO
+    - **Relevant Authorities**: [List specific government bodies]
+    - **Special Requirements**: [60% rule, multiple approvals, etc.]
+    - **Approval Process Complexity**: [LOW/MEDIUM/HIGH]
+
+    ## Structured Risk Assessment
+    ```json
+    "geographic_risk_profile": {
+        "gac_objection_risk": "[LOW/MEDIUM/HIGH]",
+        "multi_government_risk": "[LOW/MEDIUM/HIGH]",
+        "documentation_complexity": "[LOW/MEDIUM/HIGH]",
+        "overall_geographic_risk": "[1.0-5.0]"
+    }
+    ```
+
+    ## Final Classification
+    - **Geographic Status**: [NON_GEOGRAPHIC/GEOGRAPHIC_SIMPLE/GEOGRAPHIC_COMPLEX/GEOGRAPHIC_CRITICAL]
+    - **Recommendation**: [PROCEED/CONDITIONAL/EXPERT_REVIEW/BLOCKED]
+
+    **Note**: Conservative assessment applied - uncertain cases flagged for expert review.
+  agent: gac_advisor
+  context_consumer: []
+  context_producer:
+  - geographic_assessment_results
+  - geographic_scoring
+  output_file: evaluation_reports/geographic_assessment_{tld_string}.md
+  create_directory: true
+
+safeguard_assessment:
+  description: |
+    Evaluate the TLD string '{tld_string}' against ICANN's 6 mandatory safeguard questions (Q175-Q180) with structured scoring.
+
+    REQUIRED SCORING STRUCTURE:
+    1. Evaluate against ICANN safeguard criteria (Q175-Q180)
+    2. Determine required safeguard groups (1-4)
+    3. Assign numerical GAC risk score (1.0-5.0)
+    4. Identify specific safeguard requirements
+
+    For each ICANN safeguard question (Q175–Q180), provide:
+    - A Yes / No / Maybe answer
+    - 1–2 sentence rationale with specific examples
+    - Consider meanings in multiple languages and cultural contexts
+
+    🔧 **ENHANCED TOOL USAGE**:
+    - Use "ICANN New gTLD Program Applicant Guidebook Search" to reference official ICANN guidance on safeguard questions
+    - Search for relevant sections like "Safeguard Questions", "Q175", "Q176", "Q177", "Q178", "Q179", "Q180"
+    - Use "Web Search for GAC Risk Analysis" to search for recent cultural or regulatory developments (search terms like "TLD safeguard requirements", "TLD cultural sensitivity", "TLD regulatory concerns")
+    - Search for recent news about consumer protection, harassment, or government oversight related to the string
+    - Use "Advanced String Similarity Analyzer" results to identify similar strings that might have cultural or regulatory implications
+
+    **ENHANCED APPROACH**:
+    - **Conservative Safeguard Assessment**: When uncertain about safeguard requirements, err on the side of requiring safeguards
+    - **Recent Events Integration**: Use web search to identify current cultural or regulatory developments affecting string perception
+    - **Similarity Context**: Reference similarity analysis to understand potential conflicts with existing regulated terms
+
+    📝 MARKDOWN OUTPUT INSTRUCTIONS:
+    Format your evaluation as a structured markdown report with:
+    - `# Safeguard Risk Evaluation for .{tld_string}`
+    - `## Q175: Consumer Trust` (with Yes/No and rationale)
+    - `## Q176: Consumer Risk` (with Yes/No and rationale)
+    - `## Q177: Licensing Requirements` (with Yes/No and rationale)
+    - `## Q178: Government Oversight` (with Yes/No and rationale)
+    - `## Q179: Harassment Potential` (with Yes/No and rationale)
+    - `## Q180: Government Functions` (with Yes/No and rationale)
+    - `## Required Safeguard Groups` (list which groups apply)
+    - `## Final Recommendation` with **PASS**, **WATCH**, or **FAIL**
+
+    Use Markdown headers (`##`, `###`) and **bold** formatting for clarity.
+    Apply conservative assessment - when in doubt, answer YES and require safeguards.
+  expected_output: |
+    # 🛡️ ICANN Safeguard Assessment: .{tld_string}
+
+    **STATUS:** ✅ PASS / ⚠️ WATCH / ❌ FAIL
+
+    ## **🔍 ANALYSIS APPROACH**
+
+    ### **ICANN Safeguard Questions (Q175-Q180) Assessment**
+    I conducted a comprehensive evaluation of the proposed TLD ".{tld_string}" against ICANN's six mandatory safeguard questions. These questions determine whether additional safeguard measures are required to protect consumers and maintain trust in the DNS.
+
+    **My Assessment Process:**
+    1. **Q175-Q180 Evaluation**: Systematic assessment of each safeguard question
+    2. **Multi-Language Context**: Considered meanings and implications across major languages
+    3. **Cultural Sensitivity**: Evaluated cultural and regional variations in interpretation
+    4. **Risk Scoring**: Applied 1.0-5.0 scale for GAC risk assessment
+    5. **Safeguard Group Determination**: Identified which safeguard groups (1-4) apply
+
+    ### **Tools and Data Sources Used**
+    - **ICANN Guidebook Search**: Referenced official safeguard question criteria and requirements
+    - **Web Search for GAC Risk Analysis**: Searched for recent cultural and regulatory developments
+    - **Advanced String Similarity Analyzer**: Context from similarity analysis for regulatory implications
+    - **Cultural Intelligence Database**: Cross-referenced cultural and linguistic implications
+
+    ## **📊 SAFEGUARD ASSESSMENT RESULTS**
+
+    ### **Overall Safeguard Risk Summary**
+    - **Final Status**: ✅ PASS / ⚠️ WATCH / ❌ FAIL
+    - **GAC Risk Score**: [1.0-5.0] (Conservative assessment)
+    - **Safeguard Groups Required**: [Group 1, 2, 3, 4 or None]
+    - **Total Safeguard Questions Triggered**: [X] of 6 questions
+    - **Consumer Protection Level**: [Standard/Enhanced/Critical]
+
+    ## **🔍 DETAILED SAFEGUARD QUESTION ANALYSIS**
+
+    ### **Q175: Consumer Trust**
+    **Question**: Does the TLD string suggest consumer trust, safety, or security that the applicant cannot guarantee?
+
+    **Answer**: YES / NO / MAYBE
+
+    **My Reasoning**: [Detailed explanation of why this answer was given]
+    - **String Analysis**: [How the TLD string relates to consumer trust concepts]
+    - **Guarantee Assessment**: [Whether applicant can credibly guarantee trust/safety/security]
+    - **Consumer Expectations**: [What consumers might expect from this TLD]
+    - **Risk Factors**: [Specific trust-related risks identified]
+
+    **Safeguard Implications**: [What safeguards would be required if YES]
+
+    ### **Q176: Consumer Risk**
+    **Question**: Does the TLD string suggest consumer risk, financial loss, or other harm that the applicant cannot mitigate?
+
+    **Answer**: YES / NO / MAYBE
+
+    **My Reasoning**: [Detailed explanation of why this answer was given]
+    - **Risk Assessment**: [Specific consumer risks associated with the TLD]
+    - **Mitigation Capability**: [Applicant's ability to mitigate identified risks]
+    - **Financial Implications**: [Potential for financial loss or harm]
+    - **Harm Prevention**: [What measures would be needed to prevent harm]
+
+    **Safeguard Implications**: [What safeguards would be required if YES]
+
+    ### **Q177: Licensing Requirements**
+    **Question**: Does the TLD string suggest professional licensing or accreditation requirements?
+
+    **Answer**: YES / NO / MAYBE
+
+    **My Reasoning**: [Detailed explanation of why this answer was given]
+    - **Professional Context**: [Whether string relates to licensed professions]
+    - **Accreditation Implications**: [Professional accreditation requirements]
+    - **Regulatory Oversight**: [Professional regulatory bodies involved]
+    - **Verification Needs**: [What verification would be required]
+
+    **Safeguard Implications**: [What safeguards would be required if YES]
+
+    ### **Q178: Government Oversight**
+    **Question**: Does the TLD string suggest government oversight or regulatory requirements?
+
+    **Answer**: YES / NO / MAYBE
+
+    **My Reasoning**: [Detailed explanation of why this answer was given]
+    - **Regulatory Context**: [Government regulatory implications]
+    - **Oversight Requirements**: [What government oversight might be needed]
+    - **Compliance Obligations**: [Regulatory compliance requirements]
+    - **Multi-Jurisdictional Issues**: [Cross-border regulatory considerations]
+
+    **Safeguard Implications**: [What safeguards would be required if YES]
+
+    ### **Q179: Harassment Potential**
+    **Question**: Does the TLD string have potential for harassment, discrimination, or other harmful behavior?
+
+    **Answer**: YES / NO / MAYBE
+
+    **My Reasoning**: [Detailed explanation of why this answer was given]
+    - **Harassment Risk**: [Potential for harassment or abuse]
+    - **Discrimination Concerns**: [Discriminatory use possibilities]
+    - **Harmful Behavior**: [Other harmful behaviors enabled by TLD]
+    - **Vulnerable Populations**: [Impact on vulnerable groups]
+
+    **Safeguard Implications**: [What safeguards would be required if YES]
+
+    ### **Q180: Government Functions**
+    **Question**: Does the TLD string relate to government functions or official government services?
+
+    **Answer**: YES / NO / MAYBE
+
+    **My Reasoning**: [Detailed explanation of why this answer was given]
+    - **Government Function Analysis**: [Connection to government services]
+    - **Official Service Implications**: [Potential confusion with official services]
+    - **Public Authority**: [Whether string suggests public authority]
+    - **Authentication Needs**: [Government authentication requirements]
+
+    **Safeguard Implications**: [What safeguards would be required if YES]
+
+    ## **🛡️ REQUIRED SAFEGUARD GROUPS**
+
+    ### **Safeguard Group Determination**
+    ```json
+    "required_safeguard_groups": {
+        "group_flag": "[true/false]",
+        "group_2": "[true/false]",
+        "group_3": "[true/false]",
+        "group_4": "[true/false]",
+        "total_groups": "[X]"
+    }
+    ```
+
+    ### **Specific Safeguard Requirements**
+    ```json
+    "specific_requirements": [
+        "basic_verification",
+        "abuse_reporting",
+        "consumer_protection",
+        "regulatory_compliance"
+    ]
+    ```
+
+    ### **Implementation Timeline**
+    - **Pre-Launch Requirements**: [Safeguards needed before TLD launch]
+    - **Post-Launch Monitoring**: [Ongoing safeguard monitoring required]
+    - **Compliance Verification**: [How compliance will be verified]
+
+    ## **📊 RISK CLASSIFICATION & SCORING**
+
+    ### **GAC Risk Assessment**
+    - **Overall GAC Risk**: NO_RISK / LOW_RISK / MODERATE_RISK / HIGH_RISK / CRITICAL_RISK
+    - **Numerical Risk Score**: [1.0-5.0]
+    - **Score Justification**: [Detailed explanation of how score was determined]
+    - **Conservative Assessment**: [Why conservative approach was applied]
+
+    ### **Consumer Protection Level**
+    - **Protection Level Required**: [Standard/Enhanced/Critical]
+    - **Primary Concerns**: [Key consumer protection issues identified]
+    - **Mitigation Measures**: [Specific measures to address concerns]
+
+    ### **Regulatory Compliance Requirements**
+    - **Compliance Level**: [Standard/Enhanced/Specialized]
+    - **Regulatory Bodies**: [Relevant regulatory authorities]
+    - **Compliance Verification**: [How compliance will be verified]
+
+    ## **⚠️ SAFEGUARD IMPLEMENTATION PLAN**
+
+    ### **Immediate Implementation Requirements**
+    [Specific safeguards that must be implemented immediately or state "None required"]
+
+    ### **Phased Implementation Strategy**
+    [Safeguards that can be implemented in phases or state "Not applicable"]
+
+    ### **Ongoing Monitoring Requirements**
+    [Continuous monitoring requirements or state "Standard monitoring"]
+
+    ## **📈 EXPERT REVIEW TRIGGERS**
+
+    ### **Safeguard Review Requirements**
+    - **Expert Review Required**: [Yes/No]
+    - **Review Scope**: [Comprehensive/Focused/Consultative]
+    - **Specialist Type**: [Consumer protection/Regulatory/Legal]
+    - **Timeline**: [When review should occur]
+
+    ### **Regulatory Consultation**
+    - **Consultation Required**: [Yes/No]
+    - **Regulatory Bodies**: [Specific bodies to consult]
+    - **Consultation Scope**: [What needs to be discussed]
+
+    ## **📋 COMPLIANCE ROADMAP**
+
+    ### **Pre-Launch Compliance**
+    - **Required Actions**: [Specific actions needed before launch]
+    - **Verification Process**: [How compliance will be verified]
+    - **Timeline**: [When compliance must be achieved]
+
+    ### **Post-Launch Obligations**
+    - **Ongoing Requirements**: [Continuous compliance obligations]
+    - **Monitoring Frequency**: [How often compliance will be checked]
+    - **Reporting Requirements**: [What reports must be submitted]
+
+    ### **Compliance Documentation**
+    - **Documentation Required**: [Specific compliance documentation needed]
+    - **Submission Timeline**: [When documentation must be submitted]
+    - **Review Process**: [How documentation will be reviewed]
+
+    ## **🔧 ASSESSMENT METHODOLOGY & CONFIDENCE**
+
+    ### **Analysis Method**
+    - **Primary Framework**: ICANN Safeguard Questions Q175-Q180
+    - **Assessment Approach**: Conservative evaluation with expert review triggers
+    - **Scoring Method**: 1.0-5.0 GAC risk scale
+    - **Cultural Context**: Multi-language and cultural sensitivity analysis
+
+    ### **ICANN Guidebook Compliance**
+    - **Sections Referenced**: [Safeguard Questions, Consumer Protection, GAC Advice]
+    - **Criteria Applied**: [Specific ICANN safeguard evaluation criteria]
+    - **Official Requirements**: [Key safeguard requirements validated against]
+
+    ### **Confidence Assessment**
+    - **Analysis Confidence**: High/Medium/Low
+    - **Data Quality**: ✅ AUTHORITATIVE SOURCES / ⚠️ PARTIAL DATA
+    - **Method Validation**: Conservative safeguard assessment with regulatory review
+    - **Timestamp**: [Current timestamp]
+
+    ### **Agent Reasoning Summary**
+    [Brief explanation of the safeguard assessment process and confidence in conclusions]
+
+    ---
+    **Analysis conducted by**: GAC Safeguard Risk Analyst
+    **Primary framework**: ICANN Safeguard Questions (Q175-Q180)
+    **Validation method**: Conservative safeguard assessment with regulatory review
+  agent: gac_advisor
+  context_consumer:
+  - geographic_assessment_results
+  context_producer:
+  - safeguard_requirements
+  - gac_scoring
+  output_file: evaluation_reports/safeguard_assessment_{tld_string}.md
+  create_directory: true
+
+gac_risk_analysis:
+  description: |
+    Perform focused government function assessment for TLD string '{tld_string}' with emphasis on official capacity conflicts.
+
+    🔧 GOVERNMENT FUNCTION ANALYSIS:
+    1. Assess string association with government operations and public authority
+    2. Identify potential conflicts with official government functions
+    3. Evaluate need for Group 4 safeguards (mission/purpose restrictions)
+    4. Provide government function risk determination
+
+    Focus on official capacity and government authority implications.
+    Apply conservative assessment - when in doubt, flag for diplomatic review.
+  expected_output: |
+    GAC Risk Assessment for {tld_string}:
+
+    OVERALL GAC RISK: [LOW/MEDIUM/HIGH/CRITICAL]
+
+    PRECEDENT ANALYSIS: [Brief summary of relevant precedents or "No relevant precedents"]
+    GEOGRAPHIC RISK: [Assessment of geographic/cultural sensitivity]
+    GOVERNMENT FUNCTION RISK: [Assessment of government function conflicts]
+
+    KEY CONCERNS: [List main concerns or "None identified"]
+    DIPLOMATIC STRATEGY: [Brief recommendations or "Standard process"]
+
+    GAC OBJECTION LIKELIHOOD: [Low/Medium/High]
+    NEXT STEPS: [Recommendations]
+    - Combined Risk Score: [1-10 scale]
+    - Objection Probability: [LOW/MODERATE/HIGH/CRITICAL] ([percentage]%)
+    - Primary Risk Factors: [List top 3 concerns]
+    - Confidence Level: [HIGH/MEDIUM/LOW]
+
+    ## Structured Mitigation Strategies
+    [By risk category with specific diplomatic engagement tactics]
+
+    ## Proactive Engagement Recommendations
+    [Specific government outreach and stakeholder engagement strategies]
+  agent: gac_advisor
+  context_consumer:
+  - similarity_analysis_results
+  context_producer:
+  - risk_factors
+  - gac_risk_profile
+  output_file: evaluation_reports/gac_risk_{tld_string}.md
+  create_directory: true
+
+cultural_linguistic_assessment:
+  description: |
+    Assess TLD string '{tld_string}' for cultural sensitivities and language conflicts across major global languages.
+
+    Conduct comprehensive cultural analysis:
+    1. Etymology Analysis: Research the word origin, root language, and historical meaning evolution across cultures
+    2. Check for alternative spellings, translations, and variations of the string in major languages for example "kind" in English has a totally different meaning in German.
+    3. Cross-Language Relevance: List meanings and significance in major global languages (English, Spanish, French, German, Russian, Arabic, Chinese, Japanese, Hindi, Portuguese) even if not concerning
+    4. Check for Cultural Sensitivity Screening (religious, political, social taboos) where the string may have a unique meaning to the cultural group, even without an official alternate meaning in another language.
+    5. Historical Context Analysis (conflicts, sensitivities, oppression references)
+    6. Regional Variation Assessment (different meanings by geographic region)
+    7. Script Conflict Analysis (visual similarity issues across writing systems)
+    8. Homophone and False Friend Detection (sounds like or means problematic words)
+
+    Use comprehensive cultural and linguistic knowledge to identify potential issues across:
+    - Religious terms or sacred words that could cause offense
+    - Cultural slurs or terms considered offensive in any major culture
+    - Political or ideological conflicts and sensitive terminology
+    - Historical sensitivity related to wars, conflicts, or oppression
+    - Social taboos or controversial topics in different societies
+    - Translation issues where innocent words become problematic in other languages
+    - Visual script conflicts in different writing systems
+
+    🔧 **ENHANCED TOOL USAGE**:
+    - Use "Web Search for GAC Risk Analysis" to search for recent cultural developments and sensitivities (search terms like "TLD cultural sensitivity", "TLD controversy", "TLD religious concerns")
+    - Search for recent news about cultural conflicts, religious sensitivities, or social controversies related to the string
+    - Use "Advanced String Similarity Analyzer" results to identify similar strings that might have cultural or linguistic implications
+    - Use "ICANN New gTLD Program Applicant Guidebook Search" for official guidance on cultural sensitivity requirements
+
+    **ENHANCED APPROACH**:
+    - **Conservative Cultural Assessment**: When uncertain about cultural implications, flag for cultural review
+    - **Recent Events Integration**: Use web search to identify current cultural developments that might affect string perception
+    - **Similarity Context**: Reference similarity analysis to understand potential conflicts with existing culturally sensitive terms
+    - **Multi-Language Analysis**: Consider cultural implications across all major world languages and writing systems
+
+    Apply conservative cultural assessment - when in doubt, flag for cultural review.
+  expected_output: |
+    Cultural and linguistic risk assessment with STRUCTURED SCORING:
+
+    ## Etymology & Cross-Language Context
+    **Etymology:** [Word origin, root language, historical evolution]
+    **Cross-Language Meanings:** [List meanings and significance in major languages, even non-concerning ones]
+
+    ## Language Analysis
+    ```json
+    "language_assessment": {
+        "en_lang": {"score": 0, "issues": []},
+        "french": {"score": 0, "issues": []},
+        "spanish": {"score": 1, "issues": ["minor_slang_concern"]},
+        "russian": {"score": 0, "issues": []},
+        "arabic": {"score": 0, "issues": []},
+        "chinese": {"score": 0, "issues": []}
+    }
+    ```
+
+    ## Cultural Sensitivity Analysis
+    ```json
+    "cultural_assessment": {
+        "religious_concerns": [],
+        "political_sensitivities": [],
+        "social_taboos": [],
+        "historical_conflicts": [],
+        "overall_score": 1
+    }
+    ```
+
+    ## Script and Visual Conflicts
+    - Visual Similarity Issues: [List any problematic visual similarities]
+    - Script Conflicts: [Issues with different writing systems]
+    - Homophone Conflicts: [Sounds like problematic words]
+
+    ## Regional Risk Assessment
+    - North America: [Cultural risk level and specific concerns]
+    - Europe: [Cultural risk level and specific concerns]
+    - Asia-Pacific: [Cultural risk level and specific concerns]
+    - Middle East/Africa: [Cultural risk level and specific concerns]
+    - Latin America: [Cultural risk level and specific concerns]
+
+    ## Overall Risk Assessment
+    - Cultural Risk Score: [0-5 scale]
+    - Language Conflict Score: [0-5 scale]
+    - Overall Cultural/Linguistic Risk: [NONE/LOW/MODERATE/HIGH/CRITICAL]
+    - Confidence Level: [HIGH/MEDIUM/LOW]
+
+    ## Recommended Mitigations
+    - Specific cultural sensitivity measures required
+    - Geographic restrictions to consider if any
+    - Community engagement strategies for sensitive regions
+    - Marketing and communication guidelines to avoid cultural issues
+
+    ## Geographic Restrictions Recommended
+    - Regions to avoid: [specific countries/regions if cultural conflicts identified]
+    - Alternative positioning strategies for sensitive markets
+    - Cultural adaptation requirements for global deployment
+  agent: gac_advisor
+  context_consumer: []
+  context_producer:
+  - cultural_risk_factors
+  - linguistic_assessment
+  output_file: evaluation_reports/cultural_assessment_{tld_string}.md
+  create_directory: true
+
+policy_gut_check:
+  description: |
+    Quick sanity check of policy analysis results for {tld_string}.
+    Review outputs for basic logic, consistency, and completeness.
+  expected_output: |
+    Policy Gut Check for {tld_string}:
+
+    OUTPUTS REVIEWED: Geographic Assessment, Safeguards, GAC Risk, Cultural Analysis
+    LOGIC CHECK: [Pass/Fail] - Do the findings make logical sense?
+    CONSISTENCY CHECK: [Pass/Fail] - Are the conclusions consistent with evidence?
+    COMPLETENESS CHECK: [Pass/Fail] - Are all required elements present?
+
+    ISSUES FOUND: [List any obvious problems or "None"]
+    OVERALL STATUS: [Ready for Report/Needs Review]
+  agent: gac_advisor
+  output_file: evaluation_reports/policy_review_{tld_string}.md
+  create_directory: true

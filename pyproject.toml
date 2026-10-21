@@ -1,0 +1,8 @@
+[project]
+name = "open-scrutiny"
+version = "0.1.0"
+description = "Multi-agent evaluate-then-generate platform (CrewAI)"
+requires-python = ">=3.11"
+
+# Dependencies are declared in requirements.txt (single source of truth for
+# local installs and the Render build). This file holds project metadata only.

@@ -1,0 +1,30 @@
+# APPLICATION GENERATION WORKFLOWS CONFIGURATION
+# Answer generation is now handled by answer_generation_service.py (3-tier handler)
+# This YAML is kept for reference only — not used in the current generation path.
+
+answer_generation_3tier:
+  name: "3-Tier Answer Generation"
+  description: |
+    Direct answer generation without CrewAI agents. Routes questions by category:
+    - entity_field: instant DB lookup from applicants table
+    - selection_field: options + contextual tips
+    - substantive_field: single Gemini API call with evaluation context
+    - file_upload: requirements display only
+  handler: "crewai_service.answer_generation_service.AnswerGenerationService"
+  max_concurrent_ai_calls: 3
+
+# Legacy workflow (deprecated — archived at archive/legacy_rag_generation/)
+application_generation_rag:
+  name: "RAG-Based ICANN Application Generation (Deprecated)"
+  deprecated: true
+  replacement: "answer_generation_3tier"
+  description: |
+    Former 3-agent CrewAI + RAG pipeline. Replaced by direct 3-tier handler
+    for faster, simpler answer generation.
+
+application_generation_legacy:
+  name: "ICANN Application Generation (Legacy)"
+  deprecated: true
+  replacement: "answer_generation_3tier"
+  description: |
+    Original 6-agent sequential pipeline. Replaced by direct 3-tier handler.

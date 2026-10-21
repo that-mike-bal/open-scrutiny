@@ -1,0 +1,81 @@
+# ==========================================================================
+# CUSTOMIZE: Generation tasks: how evaluation output becomes generated content. Rewrite for the deliverables you need.
+# This platform is a domain-agnostic evaluate-then-generate engine; the
+# gTLD/ICANN ruleset is just the bundled example. Grep for 'CUSTOMIZE:'
+# to find every retargeting point. See the README's Customize section.
+# ==========================================================================
+
+# APPLICATION GENERATION TASKS CONFIGURATION
+# ICANN application content generation tasks
+
+# ORGANIZATION INFORMATION GENERATION
+generate_organization_information:
+  description: |
+    Generate comprehensive organization and entity information responses for ICANN application questions (Q7-125).
+    Extract and format Example Registry entity data for regulatory submission with full compliance validation.
+  expected_output: "A JSON structure containing complete organization responses with validation status and compliance metrics."
+  agent: organization_info_agent
+  output_file: application_content/organization_info_{tld_string}.json
+  create_directory: true
+  context_producer: ["organization_responses", "entity_data_context"]
+  context_consumer: ["question_requirements", "validation_context"]
+
+# TECHNICAL CAPABILITY GENERATION  
+generate_technical_capability:
+  description: |
+    Generate technical capability and infrastructure responses for ICANN application questions (Q18-55).
+    Demonstrate registry services, DNS capabilities, and operational excellence using evaluation data.
+  expected_output: "A comprehensive technical capability document with infrastructure specifications and compliance demonstrations."
+  agent: technical_capability_agent
+  output_file: application_content/technical_capability_{tld_string}.md
+  create_directory: true
+  context_producer: ["technical_responses", "capability_demonstrations"]
+  context_consumer: ["technical_analysis_results", "dns_stability_results", "organization_responses"]
+
+# FINANCIAL CAPABILITY GENERATION
+generate_financial_capability:
+  description: |
+    Generate financial projections, business models, and economic viability responses (Q126-210).
+    Create compelling financial narratives demonstrating registry sustainability and market opportunity.
+  expected_output: "A detailed financial capability package with 5-year projections, business case, and economic models."
+  agent: financial_capability_agent
+  output_file: application_content/financial_capability_{tld_string}.md
+  create_directory: true
+  context_producer: ["financial_responses", "business_case_context"]
+  context_consumer: ["business_scoring_results", "market_analysis_results", "technical_responses"]
+
+# LEGAL COMPLIANCE GENERATION
+generate_legal_compliance:
+  description: |
+    Generate legal compliance frameworks and rights protection mechanisms (Q211-275).
+    Translate legal risk findings into comprehensive compliance strategies and dispute resolution procedures.
+  expected_output: "A complete legal compliance framework with rights protection policies and regulatory adherence strategies."
+  agent: legal_compliance_agent
+  output_file: application_content/legal_compliance_{tld_string}.md
+  create_directory: true
+  context_producer: ["legal_responses", "compliance_framework_context"]
+  context_consumer: ["trademark_conflicts", "legal_risk_assessment", "financial_responses"]
+
+# APPLICATION VALIDATION
+validate_application_responses:
+  description: |
+    Validate all application responses for ICANN compliance, format requirements, and professional quality.
+    Ensure character limits, format compliance, and submission readiness across all sections.
+  expected_output: "A comprehensive validation report with compliance status and submission readiness assessment."
+  agent: application_validator
+  output_file: application_content/validation_report_{tld_string}.md
+  create_directory: true
+  context_producer: ["validation_results", "compliance_status"]
+  context_consumer: ["organization_responses", "technical_responses", "financial_responses", "legal_responses"]
+
+# APPLICATION INTEGRATION
+integrate_application_responses:
+  description: |
+    Synthesize and integrate all specialist responses into cohesive ICANN application sections.
+    Ensure consistency, eliminate redundancy, and maintain professional quality across all responses.
+  expected_output: "A complete integrated ICANN application package ready for regulatory submission with quality metrics."
+  agent: application_response_synthesizer
+  output_file: application_content/integrated_application_{tld_string}.zip
+  create_directory: true
+  context_producer: ["integrated_responses", "application_completion_status"]
+  context_consumer: ["organization_responses", "technical_responses", "financial_responses", "legal_responses", "validation_results"]

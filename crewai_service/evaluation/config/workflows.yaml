@@ -1,0 +1,80 @@
+# ==========================================================================
+# CUSTOMIZE: Defines which agents/tasks run, and in what order, per evaluation workflow. Reorder or define new workflows for your domain.
+# This platform is a domain-agnostic evaluate-then-generate engine; the
+# gTLD/ICANN ruleset is just the bundled example. Grep for 'CUSTOMIZE:'
+# to find every retargeting point. See the README's Customize section.
+# ==========================================================================
+
+# TECHNICAL RISK ASSESSMENT - Technical Analysis Only
+technical_risk_assessment:
+  name: "Technical Risk Assessment"
+  description: "Technical risk analysis - DNS stability, collision analysis, and similarity analysis with ICANN guidebook reference"
+  agents:
+    - string_analyst               # DNS stability review
+    - collision_analyst            # Name collision assessment
+    - string_analyst               # Comprehensive similarity analysis
+    - evaluation_validator         # Technical validation
+  tasks:
+    - dns_stability_review   
+    - comprehensive_similarity_analysis
+    - name_collision_assessment
+    - technical_gut_check
+  process: "sequential"
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  share_crew: true  # 🔧 ENABLED - allows coordination (matches successful config)
+  verbose: true
+  max_rpm: 10 # 🚀 MODERATE - Flash model can handle higher rates
+  max_execution_time: 300
+  step_callback: true
+  allow_delegation: false
+  max_iter: 2
+
+# LEGAL RISK ASSESSMENT - Deep Research (Trademark + Patent + IP)
+legal_risk_assessment:
+  name: "Legal Risk Assessment"
+  description: "Comprehensive legal risk research using Gemini Deep Research — trademarks, patents, and IP conflicts with cited sources"
+  agents:
+    - trademark_specialist
+  tasks:
+    - deep_research_legal_assessment
+    - legal_risk_validation
+    - legal_gut_check
+  process: "sequential"
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  share_crew: true  # 🔧 ENABLED - allows coordination (matches successful config)
+  verbose: true
+  max_rpm: 10
+  max_execution_time: 900  # 15 minutes — deep research takes time
+  step_callback: true
+  allow_delegation: false
+  max_iter: 2
+
+# POLICY SAFEGUARD REVIEW - Enhanced Geopolitical Analysis
+policy_safeguard_review:
+  name: "Policy Safeguard Review Workflow"
+  description: |
+    Comprehensive evaluation of string meaning, cultural/regulatory perception, and safeguard risk.
+    Includes geographic name review and interpretation of ICANN safeguard criteria (Q175-Q180).
+    Pure semantic analysis leveraging LLM strengths for interpretive evaluation with official ICANN guidance.
+  process: "sequential"
+  agents:
+    - gac_advisor                      # Geographic name assessment
+    - gac_advisor                      # Safeguard assessment  
+    - gac_advisor                      # GAC risk analysis
+    - gac_advisor                      # Cultural linguistic assessment
+    - gac_advisor                      # Policy validation
+  tasks:
+    - geographic_name_assessment       # → gac_advisor
+    - safeguard_assessment            # → gac_advisor
+    - cultural_linguistic_assessment  # → gac_advisor
+    - gac_risk_analysis               # → gac_advisor
+    - policy_gut_check                # → gac_advisor
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  share_crew: true  # 🔧 ENABLED - allows coordination (matches successful config)
+  verbose: true
+  max_rpm: 10 # 🚀 MODERATE - Flash model can handle higher rates
+  max_execution_time: 300
+  step_callback: true
+  allow_delegation: false
+  max_iter: 2
+  conservative_mode: true

@@ -1,0 +1,97 @@
+# APPLICATION GENERATION TOOLS CONFIGURATION
+# RAG-based tools for ICANN application content generation
+
+# RAG-POWERED TOOLS (Primary)
+rag_vector_search:
+  name: "RAG Vector Search Tool"
+  description: "Intelligent semantic search across all TLD data sources including Example Registry, evaluations, ICANN guidebook, and application guidance"
+  class: "RAGVectorSearchTool"
+  module: "crewai_service.rag_search_tool"
+  primary_agents: ["rag_entity_agent", "rag_evaluation_agent", "rag_guidance_agent"]
+  access_pattern: "shared"
+  output_type: "intelligent_search_results"
+  content_types:
+    - "applicant_data": "Applicant entity information, corporate structure, contact details"
+    - "tld_evaluation": "Risk assessments, technical evaluations, business scoring"
+    - "risk_analysis": "Trademark conflicts, collision analysis, safeguard requirements"
+    - "guidebook_section": "ICANN policies, requirements, compliance guidelines"
+    - "application_qa": "Application process guidance, submission requirements"
+    - "question_guidance": "Question-specific help and templates"
+    - "answer_templates": "Formatted answer examples and templates"
+  features:
+    - "semantic_similarity": true
+    - "icann_formatting": true
+    - "auto_content_routing": true
+    - "character_limit_awareness": true
+    - "multi_source_synthesis": true
+
+# APPLICATION GENERATION SERVICE TOOLS
+application_answer_generator:
+  name: "Application Answer Generator"
+  description: "Generates ICANN application answers using RAG-based approach with automatic data source routing"
+  class: "ApplicationGenerationService" 
+  module: "crewai_service.application_generation_service"
+  primary_agents: ["rag_entity_agent", "rag_evaluation_agent", "rag_guidance_agent"]
+  access_pattern: "service"
+  output_type: "icann_ready_answers"
+  data_source_routing:
+    - "entity_data": "Example Registry applicant information"
+    - "evaluation_synthesis": "Risk assessment and evaluation data synthesis"
+    - "question_guidance": "Question help and template provision"
+  validation_features:
+    - "character_limits": true
+    - "format_compliance": true
+    - "icann_requirements": true
+    - "copy_paste_optimization": true
+
+# LEGACY TOOLS (Deprecated — declarations only; the referenced classes/modules
+# are NOT implemented. Generation uses rag_vector_search + the handlers in
+# crewai_service/answer_generation_service.py instead.)
+applicant_data_search:
+  name: "Example Registry Entity Data Search (Legacy)"
+  description: "[DEPRECATED] Direct Example Registry data search - use rag_vector_search instead"
+  class: "ApplicantDataTool"
+  module: "crewai_service.tools.applicant_data"
+  deprecated: true
+  replacement: "rag_vector_search with content_types=['applicant_data']"
+  
+technical_assessment_analyzer:
+  name: "Technical Assessment Data Analyzer (Legacy)"
+  description: "[DEPRECATED] Direct technical assessment analysis - use rag_vector_search instead"
+  class: "TechnicalAssessmentAnalyzerTool"
+  module: "crewai_service.tools.technical_assessment_analyzer"
+  deprecated: true
+  replacement: "rag_vector_search with content_types=['tld_evaluation', 'risk_analysis']"
+
+business_case_generator:
+  name: "Business Case Generator (Legacy)"
+  description: "[DEPRECATED] Direct business case generation - use rag_vector_search instead"
+  class: "BusinessCaseGeneratorTool"
+  module: "crewai_service.tools.business_case_generator"
+  deprecated: true
+  replacement: "rag_vector_search with content_types=['tld_evaluation']"
+
+legal_compliance_generator:
+  name: "Legal Compliance Generator (Legacy)"
+  description: "[DEPRECATED] Direct legal compliance generation - use rag_vector_search instead"
+  class: "LegalComplianceGeneratorTool"
+  module: "crewai_service.tools.legal_compliance_generator"
+  deprecated: true
+  replacement: "rag_vector_search with content_types=['risk_analysis', 'guidebook_section']"
+
+# VALIDATION TOOLS (Still Active)
+response_validation_engine:
+  name: "Application Response Validation Engine"
+  description: "Validates application responses for character limits, format compliance, ICANN requirements, and quality standards"
+  class: "ResponseValidationEngineTool"
+  module: "crewai_service.tools.response_validation_engine"
+  primary_agent: "application_validator"
+  access_pattern: "validation"
+  output_type: "validation_results"
+  validation_types:
+    - "character_limit_compliance": true
+    - "format_validation": ["email", "url", "phone", "alphanumeric"]
+    - "required_field_completion": true
+    - "icann_requirement_adherence": true
+    - "professional_quality_standards": true
+    - "copy_paste_readiness": true

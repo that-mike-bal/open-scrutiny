@@ -1,0 +1,101 @@
+# ==========================================================================
+# CUSTOMIZE: Declares the tools agents can call (class + module). Add/remove tools and point them at your own data sources.
+# This platform is a domain-agnostic evaluate-then-generate engine; the
+# gTLD/ICANN ruleset is just the bundled example. Grep for 'CUSTOMIZE:'
+# to find every retargeting point. See the README's Customize section.
+# ==========================================================================
+
+# COLLISION AND TECHNICAL ANALYSIS TOOLS
+magnitude_collision_checker:
+  name: "DNS Magnitude Collision Analyzer"
+  description: "Collision risk analysis using ICANN magnitude data"
+  class: "MagnitudeCollisionTool"
+  module: "crewai_service.tools.magnitude_collision"
+  primary_agent: collision_analyst
+  access_pattern: "shared_context_with_validation"
+  validation_agent: evaluation_validator
+  output_type: "risk_assessment"
+  data_sources: ["magnitude_data.json"]
+  collision_threshold: 8.0
+  conservative_assessment: true
+
+string_analyzer:
+  name: "TLD String Analyzer"
+  description: "Analyzes TLD strings for technical compliance, characteristics, and potential issues"
+  class: "StringAnalyzerTool"
+  module: "crewai_service.tools.string_analyzer"
+  primary_agent: string_analyst
+  validation_agent: evaluation_validator
+  access_pattern: "shared_context_with_validation"
+  context_producer: ["technical_analysis_results"]
+
+similarity_analyzer:
+  name: "Advanced String Similarity Analyzer"
+  description: "Visual and phonetic similarity analysis with security focus"
+  class: "SimilarityAnalyzerTool"
+  module: "crewai_service.tools.similarity_analyzer"
+  primary_agent: string_analyst
+  access_pattern: "shared_context_with_validation"
+  validation_agent: evaluation_validator
+  data_sources: ["string_similarity.json", "visual_confusion.json"]
+  similarity_threshold: 0.7
+  conservative_mode: true
+  context_sharing: true
+
+# LEGAL RISK ANALYSIS TOOLS
+deep_research_legal_analyzer:
+  name: "Deep Research Legal Analyzer"
+  description: "Comprehensive legal risk research using Gemini Deep Research API — covers trademarks, patents, and IP conflicts with cited web sources"
+  class: "DeepResearchLegalTool"
+  module: "crewai_service.tools.deep_research_legal"
+  primary_agent: trademark_specialist
+  access_pattern: "exclusive"
+  api_keys_required: ["gemini_api_key"]
+  data_sources: ["GEMINI_DEEP_RESEARCH", "USPTO", "EUIPO", "WIPO", "WEB_SEARCH"]
+  context_consumer: ["technical_analysis_results"]
+  context_sharing: true
+
+# GAC AND POLICY ANALYSIS TOOLS
+gac_precedent_analyzer:
+  name: "GAC Historical Precedent Database"
+  description: "Analyzes GAC risks using 242 historical precedent cases"
+  class: "GACPrecedentTool"
+  module: "crewai_service.tools.gac_precedent"
+  primary_agent: gac_advisor
+  access_pattern: "shared_context_with_validation"
+  validation_agent: evaluation_validator
+  data_sources: ["gac_precedents.json"]
+  precedent_count: 242
+  historical_weight: 0.8
+  conservative_bias: true
+  context_consumer: ["technical_analysis_results"]
+
+brave_web_search:
+  name: "Web Search for GAC Risk Analysis"
+  description: "Searches the web for recent political, cultural, and geopolitical developments related to TLD strings using Brave Search API"
+  class: "BraveWebSearchTool"
+  module: "crewai_service.tools.brave_web_search"
+  primary_agent: gac_advisor
+  access_pattern: "shared_reference"
+  secondary_agents: [consumer_protection_analyst, cultural_sensitivity_analyst, government_function_analyst, safeguard_synthesizer, evaluation_validator]
+  output_type: "risk_intelligence"
+  data_sources: ["brave_api"]
+  api_requirements: ["BRAVE_API_KEY"]
+  conservative_bias: true
+  context_sharing: true
+  use_cases: ["political_developments", "cultural_sensitivity", "recent_events", "geopolitical_tensions"]
+  search_guidance: "Use specific search terms like 'TLD controversy politics', 'TLD cultural sensitivity', 'TLD recent events 2024'"
+
+# ICANN GUIDANCE TOOLS
+guidebook_search:
+  name: "ICANN Guidebook RAG Search"
+  description: "Semantic search over the ICANN New gTLD Program Applicant Guidebook using vector embeddings"
+  class: "GuidebookRAGSearchTool"
+  module: "crewai_service.tools.guidebook_rag_search"
+  primary_agent: evaluation_validator
+  secondary_agents: [gac_advisor, string_analyst, trademark_specialist]
+  access_pattern: "shared_reference"
+  output_type: "guidance"
+  data_sources: ["rag_content.guidebook_section"]
+  authoritative: true
+  context_sharing: true

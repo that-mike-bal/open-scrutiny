@@ -1,0 +1,119 @@
+{
+  "metadata": {
+    "description": "USPTO trademark database integration",
+    "last_updated": "2024-06-13",
+    "api_version": "3.0",
+    "coverage": "Active and pending US trademarks",
+    "total_records": 2800000
+  },
+  "api_endpoints": {
+    "search": "https://developer.uspto.gov/api/v1/trademark/search",
+    "details": "https://developer.uspto.gov/api/v1/trademark/{serial_number}",
+    "status": "https://developer.uspto.gov/api/v1/trademark/status/{serial_number}"
+  },
+  "search_parameters": {
+    "mark_text": "Exact or fuzzy text search",
+    "owner_name": "Trademark owner search",
+    "goods_services": "International class search",
+    "status": "Registration status filter",
+    "filing_date": "Date range filter"
+  },
+  "major_brands_sample": [
+    {
+      "mark": "APPLE",
+      "owner": "Apple Inc.",
+      "serial_number": "73006746",
+      "registration_number": "1078312",
+      "status": "LIVE",
+      "classes": ["09", "35", "42"],
+      "filing_date": "1981-09-03",
+      "registration_date": "1983-05-31",
+      "description": "Computer hardware and software",
+      "risk_level": 5.0,
+      "opposition_likelihood": "Very High"
+    },
+    {
+      "mark": "GOOGLE",
+      "owner": "Google LLC",
+      "serial_number": "78292679",
+      "registration_number": "2884502",
+      "status": "LIVE",
+      "classes": ["35", "38", "42"],
+      "filing_date": "2003-07-01",
+      "registration_date": "2006-09-26",
+      "description": "Search engine and internet services",
+      "risk_level": 5.0,
+      "opposition_likelihood": "Very High"
+    },
+    {
+      "mark": "AMAZON",
+      "owner": "Amazon Technologies, Inc.",
+      "serial_number": "75064669",
+      "registration_number": "2070698",
+      "status": "LIVE",
+      "classes": ["35", "38", "39", "42"],
+      "filing_date": "1996-05-01",
+      "registration_date": "1997-12-30",
+      "description": "Online retail and cloud services",
+      "risk_level": 5.0,
+      "opposition_likelihood": "Very High"
+    },
+    {
+      "mark": "MICROSOFT",
+      "owner": "Microsoft Corporation",
+      "serial_number": "73348140",
+      "registration_number": "1364934",
+      "status": "LIVE",
+      "classes": ["09", "16", "35", "42"],
+      "filing_date": "1982-11-29",
+      "registration_date": "1987-11-17",
+      "description": "Computer software and services",
+      "risk_level": 5.0,
+      "opposition_likelihood": "Very High"
+    }
+  ],
+  "fortune_500_brands": {
+    "technology": [
+      "APPLE", "MICROSOFT", "ALPHABET", "AMAZON", "META", "TESLA", "NVIDIA", "ORACLE", "SALESFORCE", "ADOBE"
+    ],
+    "financial": [
+      "BERKSHIRE", "JPMORGAN", "VISA", "MASTERCARD", "AMERICAN EXPRESS", "GOLDMAN SACHS", "MORGAN STANLEY", "WELLS FARGO", "CITIGROUP", "BANK OF AMERICA"
+    ],
+    "healthcare": [
+      "JOHNSON & JOHNSON", "PFIZER", "MERCK", "ABBOTT", "BRISTOL MYERS", "GILEAD", "AMGEN", "MODERNA", "REGENERON", "BIOGEN"
+    ],
+    "retail": [
+      "WALMART", "COSTCO", "HOME DEPOT", "TARGET", "LOWES", "MACYS", "NORDSTROM", "BEST BUY", "STAPLES", "OFFICE DEPOT"
+    ],
+    "automotive": [
+      "FORD", "GENERAL MOTORS", "TESLA", "CHRYSLER", "HONDA", "TOYOTA", "NISSAN", "BMW", "MERCEDES", "VOLKSWAGEN"
+    ]
+  },
+  "risk_assessment_rules": {
+    "exact_match": {
+      "risk_score": 5.0,
+      "confidence": 1.0,
+      "action": "Automatic high risk flag",
+      "recommendation": "Expect Legal Rights Objection"
+    },
+    "high_similarity": {
+      "threshold": 0.85,
+      "risk_score": 4.5,
+      "confidence": 0.9,
+      "action": "Manual review required",
+      "recommendation": "Trademark clearance analysis needed"
+    },
+    "fortune_500_match": {
+      "risk_score": 4.8,
+      "confidence": 0.95,
+      "action": "Automatic escalation",
+      "recommendation": "Expect strong opposition"
+    },
+    "active_enforcement": {
+      "indicators": ["Recent oppositions", "UDRP cases", "Litigation history"],
+      "risk_multiplier": 1.2,
+      "recommendation": "Enhanced due diligence required"
+    }
+  }
+}
+

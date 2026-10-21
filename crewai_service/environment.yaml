@@ -1,0 +1,74 @@
+# Environment-Specific CrewAI Configuration
+# Switch between local development (stability-focused) and production (quality-focused)
+
+# DEVELOPMENT ENVIRONMENT (Local Testing)
+development:
+  memory:
+    enabled: false              # Disable memory to prevent embeddings overload 
+    share_crew: true           # Enable limited context sharing for coordination
+  
+  rate_limiting:
+    max_rpm_default: 6         # CONSERVATIVE rate limiting for stability
+    max_rpm_intensive: 4       # Even more conservative for complex workflows
+  
+  api_optimization:
+    respect_context_window: true
+    max_execution_time: 600    # 10 minutes max per workflow
+    early_termination: false   # Complete tasks to avoid partial data
+    retry_on_failure: true     # Retry failed API calls
+    max_retries: 3             # Max retry attempts
+  
+  debugging:
+    verbose: true
+    log_level: "INFO"
+  
+  crash_prevention:
+    graceful_degradation: true  # Continue workflow even if individual tasks fail
+    fallback_responses: true    # Use fallback data instead of crashing
+    memory_monitoring: true     # Monitor memory usage
+    circuit_breaker: true       # Stop workflows if too many failures
+
+# PRODUCTION ENVIRONMENT (Deployed Service)
+production:
+  memory:
+    enabled: false             # Disable memory to prevent cross-evaluation contamination
+    share_crew: false         # Disable context sharing to isolate parallel evaluations
+  
+  rate_limiting:
+    max_rpm_default: 20        # Higher rate limits for production performance
+    max_rpm_intensive: 15      # Balanced performance for complex workflows
+  
+  api_optimization:
+    respect_context_window: true
+    max_execution_time: 600    # 10 minutes - reasonable for quality analysis
+    early_termination: false   # Complete full analysis in production
+    intelligent_retry: true    # Smart retry on failures
+    
+  quality:
+    conservative_bias: true    # Maintain quality standards
+    expert_review_threshold: 0.6
+    thoroughness_over_speed: true  # Prioritize quality
+    
+  monitoring:
+    api_usage_tracking: true   # Track API call patterns
+    performance_metrics: true # Monitor execution times
+    quality_scoring: true     # Track output quality
+    alert_on_excessive_calls: true  # Alert if >50 calls per task
+
+# TESTING ENVIRONMENT (CI/CD & Integration Tests)
+testing:
+  memory:
+    enabled: false             # Disable for consistent test results
+    share_crew: false         # Disable for isolated testing
+    
+  rate_limiting:
+    max_rpm_default: 5         # Very conservative for CI/CD
+    max_rpm_intensive: 3       # Prevent CI overload
+    
+  api_optimization:
+    respect_context_window: true
+    max_execution_time: 300    # 5 minutes max for tests
+    early_termination: true    # Fail fast in tests
+
+# CURRENT ACTIVE ENVIRONMENT
+current_environment: "production"  # 🎯 QUALITY FOCUSED - use production settings for best results 

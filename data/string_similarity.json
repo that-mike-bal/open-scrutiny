@@ -1,0 +1,259 @@
+{
+  "metadata": {
+    "description": "String similarity analysis for gTLD conflict detection",
+    "last_updated": "2024-06-13",
+    "version": "2.0",
+    "methodology": "Multiple similarity algorithms and visual confusion analysis",
+    "threshold_high_risk": 0.8,
+    "threshold_medium_risk": 0.6
+  },
+  "similarity_algorithms": {
+    "visual_similarity": {
+      "description": "Character shape and visual appearance similarity",
+      "weight": 0.4,
+      "factors": [
+        "Character substitution (o/0, l/1, rn/m)",
+        "Font rendering differences",
+        "Case sensitivity variations",
+        "Diacritic mark similarities"
+      ]
+    },
+    "phonetic_similarity": {
+      "description": "Pronunciation and sound similarity",
+      "weight": 0.3,
+      "algorithms": ["Soundex", "Metaphone", "Double Metaphone"],
+      "factors": [
+        "Consonant clusters",
+        "Vowel patterns",
+        "Syllable structure",
+        "Stress patterns"
+      ]
+    },
+    "edit_distance": {
+      "description": "Levenshtein distance and variations",
+      "weight": 0.2,
+      "factors": [
+        "Character insertions",
+        "Character deletions", 
+        "Character substitutions",
+        "Transpositions"
+      ]
+    },
+    "semantic_similarity": {
+      "description": "Meaning and conceptual similarity",
+      "weight": 0.1,
+      "factors": [
+        "Synonyms and related terms",
+        "Translation equivalents",
+        "Industry terminology",
+        "Cultural associations"
+      ]
+    }
+  },
+  "high_risk_patterns": {
+    "character_substitution": [
+      {
+        "pattern": "o/0 substitution",
+        "examples": [
+          {"original": "google", "variant": "g00gle", "similarity": 0.92},
+          {"original": "yahoo", "variant": "yah00", "similarity": 0.89}
+        ],
+        "risk_level": 4.5
+      },
+      {
+        "pattern": "l/1 substitution", 
+        "examples": [
+          {"original": "apple", "variant": "app1e", "similarity": 0.91},
+          {"original": "intel", "variant": "inte1", "similarity": 0.88}
+        ],
+        "risk_level": 4.3
+      },
+      {
+        "pattern": "rn/m confusion",
+        "examples": [
+          {"original": "amazon", "variant": "arnazon", "similarity": 0.87},
+          {"original": "walmart", "variant": "walrnart", "similarity": 0.85}
+        ],
+        "risk_level": 4.0
+      }
+    ],
+    "homograph_attacks": [
+      {
+        "type": "Cyrillic substitution",
+        "examples": [
+          {"original": "apple", "variant": "аpple", "similarity": 0.95, "note": "Cyrillic 'а'"},
+          {"original": "google", "variant": "gооgle", "similarity": 0.94, "note": "Cyrillic 'о'"}
+        ],
+        "risk_level": 4.8
+      },
+      {
+        "type": "Greek substitution",
+        "examples": [
+          {"original": "microsoft", "variant": "micrοsoft", "similarity": 0.93, "note": "Greek 'ο'"},
+          {"original": "amazon", "variant": "αmazon", "similarity": 0.92, "note": "Greek 'α'"}
+        ],
+        "risk_level": 4.6
+      }
+    ],
+    "typosquatting_patterns": [
+      {
+        "type": "Adjacent key errors",
+        "examples": [
+          {"original": "facebook", "variant": "facwbook", "similarity": 0.82},
+          {"original": "twitter", "variant": "twittwr", "similarity": 0.84}
+        ],
+        "risk_level": 3.8
+      },
+      {
+        "type": "Double character",
+        "examples": [
+          {"original": "google", "variant": "gooogle", "similarity": 0.86},
+          {"original": "apple", "variant": "appple", "similarity": 0.83}
+        ],
+        "risk_level": 3.5
+      }
+    ]
+  },
+  "existing_tld_similarities": {
+    "high_risk_similarities": [
+      {
+        "existing_tld": "com",
+        "similar_strings": [
+          {"string": "comm", "similarity": 0.85, "risk": 4.5},
+          {"string": "con", "similarity": 0.82, "risk": 4.2},
+          {"string": "cam", "similarity": 0.78, "risk": 3.8}
+        ]
+      },
+      {
+        "existing_tld": "net",
+        "similar_strings": [
+          {"string": "nett", "similarity": 0.87, "risk": 4.6},
+          {"string": "net", "similarity": 1.0, "risk": 5.0, "note": "Exact match"},
+          {"string": "nat", "similarity": 0.79, "risk": 3.9}
+        ]
+      },
+      {
+        "existing_tld": "org",
+        "similar_strings": [
+          {"string": "orgg", "similarity": 0.88, "risk": 4.7},
+          {"string": "0rg", "similarity": 0.91, "risk": 4.8},
+          {"string": "arg", "similarity": 0.76, "risk": 3.6}
+        ]
+      }
+    ],
+    "brand_tld_similarities": [
+      {
+        "existing_tld": "apple",
+        "similar_strings": [
+          {"string": "app1e", "similarity": 0.91, "risk": 4.8},
+          {"string": "appl", "similarity": 0.89, "risk": 4.6},
+          {"string": "aple", "similarity": 0.85, "risk": 4.3}
+        ]
+      },
+      {
+        "existing_tld": "google",
+        "similar_strings": [
+          {"string": "g00gle", "similarity": 0.92, "risk": 4.9},
+          {"string": "googl", "similarity": 0.88, "risk": 4.5},
+          {"string": "gogle", "similarity": 0.84, "risk": 4.2}
+        ]
+      }
+    ]
+  },
+  "language_specific_risks": {
+    "chinese_simplified": {
+      "description": "Simplified Chinese character similarities",
+      "high_risk_pairs": [
+        {"char1": "人", "char2": "入", "similarity": 0.89},
+        {"char1": "土", "char2": "士", "similarity": 0.87},
+        {"char1": "未", "char2": "末", "similarity": 0.85}
+      ]
+    },
+    "arabic": {
+      "description": "Arabic script similarities",
+      "high_risk_pairs": [
+        {"char1": "ب", "char2": "ت", "similarity": 0.91},
+        {"char1": "ح", "char2": "خ", "similarity": 0.88},
+        {"char1": "د", "char2": "ذ", "similarity": 0.86}
+      ]
+    },
+    "devanagari": {
+      "description": "Devanagari script similarities",
+      "high_risk_pairs": [
+        {"char1": "प", "char2": "फ", "similarity": 0.89},
+        {"char1": "ब", "char2": "भ", "similarity": 0.87},
+        {"char1": "द", "char2": "ध", "similarity": 0.85}
+      ]
+    }
+  },
+  "assessment_framework": {
+    "similarity_thresholds": {
+      "very_high_risk": {
+        "threshold": 0.9,
+        "action": "Automatic rejection recommended",
+        "confidence": 0.95
+      },
+      "high_risk": {
+        "threshold": 0.8,
+        "action": "Expert review required",
+        "confidence": 0.9
+      },
+      "medium_risk": {
+        "threshold": 0.6,
+        "action": "Enhanced due diligence",
+        "confidence": 0.8
+      },
+      "low_risk": {
+        "threshold": 0.4,
+        "action": "Standard review",
+        "confidence": 0.7
+      }
+    },
+    "contextual_factors": [
+      {
+        "factor": "Industry relevance",
+        "description": "Similarity within same industry sector",
+        "risk_multiplier": 1.3
+      },
+      {
+        "factor": "Geographic overlap",
+        "description": "Similar strings in same geographic market",
+        "risk_multiplier": 1.2
+      },
+      {
+        "factor": "User confusion potential",
+        "description": "Likelihood of end-user confusion",
+        "risk_multiplier": 1.4
+      },
+      {
+        "factor": "Trademark enforcement history",
+        "description": "History of aggressive trademark enforcement",
+        "risk_multiplier": 1.5
+      }
+    ]
+  },
+  "mitigation_strategies": {
+    "high_similarity_detected": [
+      "Conduct comprehensive trademark clearance",
+      "Obtain consent from similar mark owners",
+      "Implement strong brand differentiation",
+      "Consider alternative string options",
+      "Prepare for potential objections"
+    ],
+    "visual_confusion_risk": [
+      "Design distinctive visual identity",
+      "Use clear typography guidelines",
+      "Implement anti-phishing measures",
+      "Monitor for cybersquatting",
+      "Educate users on authentic domains"
+    ],
+    "phonetic_similarity": [
+      "Develop distinct pronunciation guides",
+      "Use audio branding elements",
+      "Create phonetic differentiation",
+      "Monitor voice search impacts",
+      "Consider regional pronunciation differences"
+    ]
+  }
+}
+

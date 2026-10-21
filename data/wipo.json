@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "description": "World Intellectual Property Organization Global Brand Database",
+    "last_updated": "2024-06-13",
+    "api_version": "1.0",
+    "coverage": "Madrid Protocol international registrations",
+    "total_records": 1500000
+  },
+  "api_endpoints": {
+    "search": "https://www.wipo.int/branddb/search",
+    "details": "https://www.wipo.int/branddb/details/{registration_number}",
+    "status": "https://www.wipo.int/branddb/status/{registration_number}"
+  },
+  "global_brands": [
+    {
+      "mark": "COCA-COLA",
+      "owner": "The Coca-Cola Company",
+      "registration_number": "594089",
+      "status": "ACTIVE",
+      "classes": ["32", "35"],
+      "designated_countries": 180,
+      "filing_date": "1993-07-15",
+      "risk_level": 5.0,
+      "opposition_likelihood": "Extremely High",
+      "enforcement_history": "Very aggressive enforcement globally"
+    },
+    {
+      "mark": "MCDONALD'S",
+      "owner": "McDonald's Corporation",
+      "registration_number": "456789",
+      "status": "ACTIVE",
+      "classes": ["29", "30", "35", "43"],
+      "designated_countries": 165,
+      "filing_date": "1985-03-20",
+      "risk_level": 5.0,
+      "opposition_likelihood": "Extremely High",
+      "enforcement_history": "Extensive global enforcement"
+    },
+    {
+      "mark": "NIKE",
+      "owner": "Nike, Inc.",
+      "registration_number": "789123",
+      "status": "ACTIVE",
+      "classes": ["18", "25", "35"],
+      "designated_countries": 155,
+      "filing_date": "1990-11-08",
+      "risk_level": 5.0,
+      "opposition_likelihood": "Very High",
+      "enforcement_history": "Active global enforcement"
+    }
+  ],
+  "well_known_marks": {
+    "description": "Marks with enhanced protection under Paris Convention Article 6bis",
+    "criteria": [
+      "Recognition in relevant sector of public",
+      "Duration and extent of use",
+      "Geographical extent of use",
+      "Promotional activities",
+      "Registration history"
+    ],
+    "examples": [
+      "COCA-COLA", "PEPSI", "MCDONALD'S", "NIKE", "ADIDAS", "SONY", "SAMSUNG",
+      "TOYOTA", "HONDA", "BMW", "MERCEDES", "ROLEX", "CARTIER", "CHANEL",
+      "LOUIS VUITTON", "GUCCI", "PRADA", "HERMES", "TIFFANY", "BULGARI"
+    ],
+    "protection_scope": "Beyond registered classes and countries"
+  },
+  "madrid_system_countries": [
+    "United States", "European Union", "China", "Japan", "United Kingdom",
+    "Australia", "Canada", "South Korea", "Switzerland", "Norway",
+    "Singapore", "New Zealand", "Israel", "Mexico", "Brazil",
+    "India", "Russia", "Turkey", "Ukraine", "Belarus"
+  ],
+  "risk_assessment": {
+    "international_registration": {
+      "risk_score": 4.5,
+      "confidence": 0.9,
+      "reason": "Broad international protection"
+    },
+    "well_known_mark": {
+      "risk_score": 5.0,
+      "confidence": 0.95,
+      "reason": "Enhanced protection beyond registration"
+    },
+    "extensive_designation": {
+      "threshold": 50,
+      "risk_multiplier": 1.2,
+      "reason": "Wide geographic protection"
+    }
+  }
+}
+

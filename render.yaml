@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: crewai-assistant
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt &&
+      cd client &&
+      npm install &&
+      npm run build
+    startCommand: cd crewai_service && uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SERPER_API_KEY
+        sync: false
+      - key: BRAVE_API_KEY
+        sync: false
+      - key: USPTO_API_KEY
+        sync: false
+      - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG_MODE
+        value: false
+      - key: LOG_LEVEL
+        value: INFO
+      - key: VITE_FRONTEND_URL
+        sync: false
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false

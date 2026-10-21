@@ -1,0 +1,206 @@
+{
+  "metadata": {
+    "source": "ICANN Specification 5, RFC 6761, and ISO 3166-1",
+    "last_updated": "2025-01-15",
+    "version": "1.1",
+    "description": "Names reserved by ICANN policy, RFC specifications, and ISO country codes",
+    "total_entries": 419
+  },
+  "reserved_categories": {
+    "rfc_2606_reserved": {
+      "description": "RFC 2606 - Reserved Top Level DNS Names",
+      "policy_reference": "RFC 2606",
+      "risk_level": 5.0,
+      "entries": [
+        "test", "example", "invalid", "localhost", "local"
+      ]
+    },
+    "rfc_6761_special_use": {
+      "description": "RFC 6761 - Special-Use Top Level Domains",
+      "policy_reference": "RFC 6761",
+      "risk_level": 5.0,
+      "entries": [
+        "local", "onion", "exit", "i2p"
+      ]
+    },
+    "icann_operational": {
+      "description": "ICANN operational and administrative names",
+      "policy_reference": "ICANN Specification 5",
+      "risk_level": 5.0,
+      "entries": [
+        "icann", "iana", "gtld-servers", "idn-tables", "internic",
+        "root-servers", "whois", "rdap", "dns-oarc", "ietf"
+      ]
+    },
+    "geographic_reserved": {
+      "description": "Geographic names requiring special approval",
+      "policy_reference": "GAC Advice on Geographic Names",
+      "risk_level": 4.5,
+      "entries": [
+        "africa", "asia", "europe", "america", "oceania", "antarctica",
+        "arctic", "mediterranean", "caribbean", "pacific", "atlantic",
+        "indian", "baltic", "north", "south", "east", "west", "central"
+      ]
+    },
+    "international_organizations": {
+      "description": "Names of international organizations",
+      "policy_reference": "GAC Advice on IGO Names",
+      "risk_level": 4.0,
+      "entries": [
+        "un", "unesco", "who", "wto", "nato", "eu", "asean", "oic",
+        "au", "oas", "coe", "osce", "apec", "saarc", "mercosur",
+        "ecowas", "sadc", "gcc", "arab-league", "commonwealth"
+      ]
+    },
+    "olympic_movement": {
+      "description": "Olympic and Paralympic related names",
+      "policy_reference": "IOC/IPC Agreement with ICANN",
+      "risk_level": 4.5,
+      "entries": [
+        "olympic", "olympics", "paralympic", "paralympics", "olympiad",
+        "olympique", "olimpico", "olimpicos", "paralympique", "paralympiques"
+      ]
+    },
+    "red_cross_movement": {
+      "description": "Red Cross and Red Crescent names",
+      "policy_reference": "RCRC Agreement with ICANN",
+      "risk_level": 4.5,
+      "entries": [
+        "redcross", "red-cross", "redcrescent", "red-crescent",
+        "croixrouge", "croix-rouge", "cruzvermella", "cruz-vermella",
+        "roteskreuz", "rotes-kreuz", "croce-rossa", "crocerossa"
+      ]
+    },
+    "infrastructure_names": {
+      "description": "Critical internet infrastructure names",
+      "policy_reference": "IANA Special-Use Registry",
+      "risk_level": 5.0,
+      "entries": [
+        "arpa", "in-addr", "ip6", "uri", "urn", "localhost",
+        "localdomain", "local", "home", "corp", "mail", "www",
+        "ftp", "ntp", "dns", "dhcp", "proxy", "gateway"
+      ]
+    },
+    "generic_terms": {
+      "description": "Generic terms with special considerations",
+      "policy_reference": "ICANN Generic Names Policy",
+      "risk_level": 3.0,
+      "entries": [
+        "generic", "common", "standard", "default", "system",
+        "admin", "administrator", "root", "user", "guest", "public",
+        "private", "internal", "external", "global", "universal"
+      ]
+    },
+    "protocol_identifiers": {
+      "description": "Network protocol identifiers",
+      "policy_reference": "IANA Protocol Registry",
+      "risk_level": 4.0,
+      "entries": [
+        "http", "https", "ftp", "ftps", "ssh", "telnet", "smtp",
+        "pop", "imap", "dns", "dhcp", "snmp", "ldap", "nfs", "smb"
+      ]
+    },
+    "country_code_variants": {
+      "description": "Variants and historical country codes",
+      "policy_reference": "ISO 3166-1 and historical codes",
+      "risk_level": 4.5,
+      "entries": [
+        "su", "yu", "tp", "zr", "cs", "dd", "an", "bu", "ct", "dh",
+        "fq", "ge", "hv", "jt", "mi", "nh", "nq", "pc", "pu", "rh",
+        "sk", "vd", "wk", "yd", "zz"
+      ]
+    },
+    "iso_3166_alpha3_codes": {
+      "description": "ISO 3166-1 alpha-3 country codes",
+      "policy_reference": "ISO 3166-1 alpha-3 standard",
+      "risk_level": 4.5,
+      "entries": [
+        "abw", "afg", "ago", "aia", "ala", "alb", "and", "are", "arg", "arm",
+        "asm", "ata", "atf", "atg", "aus", "aut", "aze", "bdi", "bel", "ben",
+        "bes", "bfa", "bgd", "bgr", "bhr", "bhs", "bih", "blm", "blr", "blz",
+        "bmu", "bol", "bra", "brb", "brn", "btn", "bvt", "bwa", "caf", "can",
+        "cck", "che", "chl", "chn", "civ", "cmr", "cod", "cog", "cok", "col",
+        "com", "cpv", "cri", "cub", "cuw", "cxr", "cym", "cyp", "cze", "deu",
+        "dji", "dma", "dnk", "dom", "dza", "ecu", "egy", "eri", "esh", "esp",
+        "est", "eth", "fin", "fji", "flk", "fra", "fro", "fsm", "gab", "gbr",
+        "geo", "ggy", "gha", "gib", "gin", "glp", "gmb", "gnb", "gnq", "grc",
+        "grd", "grl", "gtm", "guf", "gum", "guy", "hkg", "hmd", "hnd", "hrv",
+        "hti", "hun", "idn", "imn", "ind", "iot", "irl", "irn", "irq", "isl",
+        "isr", "ita", "jam", "jey", "jor", "jpn", "kaz", "ken", "kgz", "khm",
+        "kir", "kna", "kor", "kwt", "lao", "lbn", "lbr", "lby", "lca", "lie",
+        "lka", "lso", "ltu", "lux", "lva", "mac", "maf", "mar", "mco", "mda",
+        "mdg", "mdv", "mex", "mhl", "mkd", "mli", "mlt", "mmr", "mne", "mng",
+        "mnp", "moz", "mrt", "msr", "mtq", "mus", "mwi", "mys", "myt", "nam",
+        "ncl", "ner", "nfk", "nga", "nic", "niu", "nld", "nor", "npl", "nru",
+        "nzl", "omn", "pak", "pan", "pcn", "per", "phl", "plw", "png", "pol",
+        "pri", "prk", "prt", "pry", "pse", "pyf", "qat", "reu", "rou", "rus",
+        "rwa", "sau", "sdn", "sen", "sgp", "sgs", "shn", "sjm", "slb", "sle",
+        "slv", "smr", "som", "spm", "srb", "ssd", "stp", "sur", "svk", "svn",
+        "swe", "swz", "sxm", "syc", "syr", "tca", "tcd", "tgo", "tha", "tjk",
+        "tkl", "tkm", "tls", "ton", "tto", "tun", "tur", "tuv", "twn", "tza",
+        "uga", "ukr", "umi", "ury", "usa", "uzb", "vat", "vct", "ven", "vgb",
+        "vir", "vnm", "vut", "wlf", "wsm", "yem", "zaf", "zmb", "zwe"
+      ]
+    },
+    "trademark_sensitive": {
+      "description": "Names with high trademark sensitivity",
+      "policy_reference": "Trademark Clearinghouse Guidelines",
+      "risk_level": 3.5,
+      "entries": [
+        "trademark", "copyright", "patent", "brand", "logo", "service",
+        "product", "company", "corporation", "enterprise", "business",
+        "commercial", "trade", "market", "shop", "store", "retail"
+      ]
+    }
+  },
+  "assessment_rules": {
+    "exact_match": {
+      "description": "Exact match with reserved name",
+      "action": "automatic_rejection",
+      "risk_score": 5.0,
+      "confidence": 1.0
+    },
+    "case_insensitive_match": {
+      "description": "Case-insensitive match with reserved name",
+      "action": "automatic_rejection",
+      "risk_score": 5.0,
+      "confidence": 1.0
+    },
+    "idn_variant_match": {
+      "description": "IDN variant of reserved name",
+      "action": "expert_review_required",
+      "risk_score": 4.5,
+      "confidence": 0.9
+    },
+    "substring_match": {
+      "description": "Contains reserved name as substring",
+      "action": "enhanced_review",
+      "risk_score": 3.0,
+      "confidence": 0.7
+    }
+  },
+  "exceptions": {
+    "geographic_with_approval": {
+      "description": "Geographic names with government approval",
+      "examples": [".london", ".nyc", ".paris", ".tokyo"],
+      "requirement": "Government letter of support"
+    },
+    "brand_names": {
+      "description": "Established brand names with trademark rights",
+      "examples": [".google", ".apple", ".amazon"],
+      "requirement": "Trademark verification and brand protection plan"
+    },
+    "community_applications": {
+      "description": "Community-based applications with special consideration",
+      "examples": [".gay", ".catholic", ".islam"],
+      "requirement": "Community endorsement and support"
+    }
+  },
+  "update_procedures": {
+    "monitoring": "Continuous monitoring of IANA registries and RFC publications",
+    "review_cycle": "Quarterly review of reserved names list",
+    "change_process": "ICANN policy development process for modifications",
+    "notification": "30-day public comment period for proposed changes"
+  }
+}
+

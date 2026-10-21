@@ -1,0 +1,107 @@
+{
+  "metadata": {
+    "source": "GAC Early Warning Database",
+    "last_updated": "2024-01-15",
+    "total_entries": 4,
+    "version": "1.0",
+    "description": "Comprehensive GAC Early Warning precedent database for professional TLD analysis",
+    "historical_failure_rate": 0.571
+  },
+  "warning_categories": {
+    "geographic_controversial": {
+      "description": "Geographic names with diplomatic sensitivities",
+      "risk_level": "VERY_HIGH",
+      "subcategories": {
+        "disputed_territories": {
+          "examples": [
+            {
+              "string": "persiangulf",
+              "warning_governments": ["Iran", "UAE", "Saudi Arabia"],
+              "outcome": "withdrawn",
+              "precedent_value": "high",
+              "rationale": "Disputed geographic terminology"
+            }
+          ]
+        },
+        "sensitive_regions": {
+          "examples": [
+            {
+              "string": "amazon",
+              "warning_governments": ["Brazil", "Peru"],
+              "outcome": "contested",
+              "precedent_value": "high",
+              "rationale": "Geographic name with commercial conflict"
+            }
+          ]
+        }
+      }
+    },
+    "geographic_neutral": {
+      "description": "Geographic names with community support",
+      "risk_level": "LOW",
+      "subcategories": {
+        "community_endorsed": {
+          "examples": [
+            {
+              "string": "africa",
+              "warning_governments": [],
+              "outcome": "delegated",
+              "precedent_value": "positive",
+              "rationale": "Strong community endorsement"
+            }
+          ]
+        }
+      }
+    },
+    "cultural_religious": {
+      "description": "Cultural or religious terms",
+      "risk_level": "HIGH",
+      "subcategories": {
+        "religious_terms": {
+          "examples": [
+            {
+              "string": "islam",
+              "warning_governments": ["France", "Germany"],
+              "outcome": "withdrawn",
+              "precedent_value": "high",
+              "rationale": "Religious sensitivity concerns"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "outcome_prediction_model": {
+    "factors": [
+      {
+        "name": "number_of_warnings",
+        "weight": 0.4,
+        "description": "Number of GAC Early Warnings received"
+      },
+      {
+        "name": "government_sensitivity",
+        "weight": 0.3,
+        "description": "Sensitivity of warning governments"
+      },
+      {
+        "name": "category_risk",
+        "weight": 0.3,
+        "description": "Risk level of warning category"
+      }
+    ],
+    "outcome_thresholds": {
+      "likely_failure": 4.0,
+      "high_risk": 3.5,
+      "requires_mitigation": 2.5,
+      "likely_success": 2.0
+    }
+  },
+  "risk_assessment_framework": {
+    "mitigation_strategies": [
+      "Engage with warning governments early",
+      "Provide detailed community support documentation",
+      "Demonstrate public interest benefits",
+      "Establish clear usage policies"
+    ]
+  }
+} 

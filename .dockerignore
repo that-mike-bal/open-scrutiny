@@ -1,0 +1,136 @@
+# =============================================================================
+# Docker Ignore File for TLD Evaluation Platform
+# =============================================================================
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+README*
+CHANGELOG*
+docs/
+# Note: Allow requirements.txt for Docker builds
+
+# Environment and configuration
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+crewai_service.log
+service.log
+
+# Node.js (for frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn
+dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.egg-info/
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+*.bak
+*.backup
+backups/
+
+# Lock files
+package-lock.json
+yarn.lock
+Pipfile.lock
+poetry.lock
+uv.lock
+
+# Testing
+.pytest_cache/
+.coverage
+coverage/
+.nyc_output/
+test-results/
+
+# Local development
+.local/
+local/
+scripts/test*
+scripts/debug*
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Secrets (should never be in Docker images)
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Analysis and debugging files
+stuck_strings_analysis_report.md
+*.analysis
+debug_*
+test_*
+investigate_*
+fix_*
+apply_*
+check_*
+
+# Project-specific excludes
+supabase_schema_for_debuging
+supabase/
+pyproject.toml
+quick-start.sh
+run_crewai_service.sh
+
+# Large data files that shouldn't be in containers
+data/Magnitude*.csv
+*.csv
+*.json.large
+*.dataset

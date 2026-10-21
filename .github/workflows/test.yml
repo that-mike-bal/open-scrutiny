@@ -1,0 +1,66 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend:
+    name: Backend (pytest)
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: .python-version
+        cache: pip
+        cache-dependency-path: requirements.txt
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-mock
+
+    - name: Run backend and integration tests
+      env:
+        # Placeholders only: the suite mocks every database and model call.
+        ENVIRONMENT: test
+        SUPABASE_URL: http://localhost
+        SUPABASE_SERVICE_KEY: test-key
+        SUPABASE_ANON_KEY: test-key
+        GEMINI_API_KEY: test-gemini-key
+        OPENAI_API_KEY: test-openai-key
+      run: pytest -q
+
+  frontend:
+    name: Frontend (type-check + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: npm
+        cache-dependency-path: client/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Type-check and build
+      run: npm run build-strict
+
+    # `npx vitest run` and `npm run lint` are not gated yet: the frontend unit
+    # tests predate the current components (5/32 pass) and ESLint reports 87
+    # errors, mostly explicit `any`. Both are tracked follow-ups.

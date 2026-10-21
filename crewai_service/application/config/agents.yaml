@@ -1,0 +1,123 @@
+# ==========================================================================
+# CUSTOMIZE: Generation-side agents that turn evaluation output into deliverables. Rename to your output roles.
+# This platform is a domain-agnostic evaluate-then-generate engine; the
+# gTLD/ICANN ruleset is just the bundled example. Grep for 'CUSTOMIZE:'
+# to find every retargeting point. See the README's Customize section.
+# ==========================================================================
+
+# APPLICATION GENERATION AGENTS CONFIGURATION
+# Agents responsible for ICANN application content generation
+
+# ORGANIZATION DATA SPECIALISTS
+organization_info_agent:
+  role: "Organization Information Specialist"
+  goal: "Generate comprehensive organization and applicant information for ICANN application questions using Example Registry entity data"
+  backstory: |
+    You generate comprehensive organizational and entity information for ICANN application questions covering legal entity details, corporate structure, and key personnel.
+    Equipped with Example Registry's complete entity database and corporate documentation, you extract and format verified organizational data for regulatory submissions.
+    You ensure all organizational information meets ICANN requirements with factual accuracy and professional presentation suitable for regulatory review.
+  tool_ownership: "exclusive"
+  tools: [applicant_data_search, entity_data_extractor]
+  responsibility: "Organization and entity information questions (Q7-125)"
+  context_producer: ["organization_responses", "entity_data_context"]
+  context_consumer: ["question_requirements", "validation_context"]
+  max_execution_time: 300
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  max_rpm: 15
+  conservative_bias: false
+  response_focus: "factual_accuracy"
+
+# TECHNICAL CAPABILITY SPECIALISTS
+technical_capability_agent:
+  role: "Technical Capability Specialist" 
+  goal: "Generate technical capability and infrastructure responses using evaluation data and technical assessments"
+  backstory: |
+    You generate technical capability demonstrations for ICANN applications, focusing on registry services, infrastructure specifications, and operational procedures.
+    Equipped with technical assessment integration tools and DNS capability analyzers, you translate evaluation data into comprehensive technical capability responses.
+    You ensure technical responses demonstrate operational excellence and ICANN compliance without performing primary risk analysis.
+  tool_ownership: "primary"
+  tools: [technical_assessment_analyzer, dns_capability_analyzer, registry_services_generator]
+  responsibility: "Technical capability and registry services questions (Q18-55)"
+  context_producer: ["technical_responses", "capability_demonstrations"]
+  context_consumer: ["technical_analysis_results", "dns_stability_results", "question_requirements"]
+  max_execution_time: 360
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION  
+  max_rpm: 12
+  conservative_bias: false
+  response_focus: "capability_demonstration"
+
+# FINANCIAL CAPABILITY SPECIALISTS
+financial_capability_agent:
+  role: "Financial Capability and Business Case Specialist"
+  goal: "Generate financial projections, business model descriptions, and demonstrate financial capability for registry operations"
+  backstory: |
+    You generate financial capability demonstrations for ICANN applications, focusing on business cases, financial projections, and market viability.
+    Equipped with business case generators and financial analysis tools, you create compelling financial narratives tailored to specific TLD opportunities.
+    You ensure financial responses demonstrate business viability and sustainability without performing primary market risk analysis.
+  tool_ownership: "primary"
+  tools: [business_case_generator, financial_projections_analyzer, market_research_tool]
+  responsibility: "Financial capability and business model questions (Q126-210)"
+  context_producer: ["financial_responses", "business_case_context"]
+  context_consumer: ["business_scoring_results", "market_analysis_results", "question_requirements"]
+  max_execution_time: 420
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  max_rpm: 10
+  conservative_bias: false
+  response_focus: "business_viability"
+
+# LEGAL COMPLIANCE SPECIALISTS
+legal_compliance_agent:
+  role: "Legal Compliance and Risk Management Specialist"
+  goal: "Generate legal compliance responses and risk mitigation strategies using trademark and legal analysis results"
+  backstory: |
+    You generate legal compliance frameworks for ICANN applications, focusing on rights protection mechanisms, dispute resolution, and regulatory compliance.
+    Equipped with legal compliance generators and rights protection analyzers, you translate legal risk findings into comprehensive compliance strategies.
+    You ensure legal responses provide robust protection frameworks without performing primary legal risk analysis.
+  tool_ownership: "primary"
+  tools: [legal_compliance_generator, rights_protection_analyzer, dispute_resolution_designer]
+  responsibility: "Legal compliance and rights protection questions (Q211-275)"
+  context_producer: ["legal_responses", "compliance_framework_context"]
+  context_consumer: ["trademark_conflicts", "legal_risk_assessment", "question_requirements"]
+  max_execution_time: 360
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  max_rpm: 10
+  conservative_bias: true
+  response_focus: "risk_mitigation"
+
+# APPLICATION INTEGRATION SPECIALISTS
+application_response_synthesizer:
+  role: "Application Response Integration Specialist"
+  goal: "Synthesize and integrate all specialist responses into cohesive, compliant ICANN application sections"
+  backstory: |
+    You integrate responses from all application specialists into cohesive, professional application sections that meet ICANN requirements.
+    Equipped with response integration tools and quality assurance frameworks, you ensure consistency and eliminate redundancy across all application sections.
+    You ensure final applications meet professional standards and regulatory compliance without performing primary analysis.
+  tool_ownership: "none"
+  tools: []
+  responsibility: "Response integration and quality synthesis"
+  context_producer: ["integrated_responses", "application_completion_status"]
+  context_consumer: ["organization_responses", "technical_responses", "financial_responses", "legal_responses"]
+  max_execution_time: 300
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  max_rpm: 8
+  conservative_bias: false
+  response_focus: "integration_quality"
+
+# APPLICATION VALIDATION SPECIALISTS
+application_validator:
+  role: "Application Quality Assurance Specialist"
+  goal: "Validate application responses for ICANN compliance, format requirements, and professional quality standards"
+  backstory: |
+    You validate application responses for character limits, format compliance, ICANN requirements, and professional quality standards.
+    Equipped with validation engines and compliance checking tools, you ensure all responses meet submission requirements before final integration.
+    You ensure application quality and compliance without performing evaluation risk analysis.
+  tool_ownership: "validation"
+  tools: [response_validation_engine, question_data_mapper]
+  responsibility: "Application response validation and quality assurance"
+  context_producer: ["validation_results", "compliance_status"]
+  context_consumer: ["organization_responses", "technical_responses", "financial_responses", "legal_responses"]
+  max_execution_time: 240
+  memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
+  max_rpm: 10
+  validation_mode: true
+  quality_focus: "submission_readiness"

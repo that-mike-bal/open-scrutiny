@@ -1,0 +1,276 @@
+{
+  "metadata": {
+    "description": "Visual confusion analysis for gTLD strings",
+    "last_updated": "2024-06-13",
+    "version": "1.0",
+    "methodology": "Font rendering and visual perception analysis",
+    "test_fonts": ["Arial", "Times New Roman", "Helvetica", "Calibri", "Verdana"]
+  },
+  "visual_confusion_matrix": {
+    "latin_characters": {
+      "high_confusion_pairs": [
+        {
+          "char1": "O",
+          "char2": "0",
+          "confusion_score": 0.95,
+          "fonts_affected": ["Arial", "Helvetica", "Calibri"],
+          "context_dependency": "High - depends on font and size"
+        },
+        {
+          "char1": "l",
+          "char2": "1",
+          "confusion_score": 0.92,
+          "fonts_affected": ["Arial", "Helvetica", "Verdana"],
+          "context_dependency": "Very High - almost identical in many fonts"
+        },
+        {
+          "char1": "I",
+          "char2": "l",
+          "confusion_score": 0.89,
+          "fonts_affected": ["Arial", "Helvetica", "Calibri"],
+          "context_dependency": "High - sans-serif fonts particularly problematic"
+        },
+        {
+          "char1": "rn",
+          "char2": "m",
+          "confusion_score": 0.87,
+          "fonts_affected": ["Times New Roman", "Calibri"],
+          "context_dependency": "Medium - depends on kerning"
+        },
+        {
+          "char1": "cl",
+          "char2": "d",
+          "confusion_score": 0.83,
+          "fonts_affected": ["Arial", "Helvetica"],
+          "context_dependency": "Medium - specific font combinations"
+        }
+      ],
+      "medium_confusion_pairs": [
+        {
+          "char1": "S",
+          "char2": "5",
+          "confusion_score": 0.78,
+          "fonts_affected": ["Arial", "Calibri"],
+          "context_dependency": "Medium"
+        },
+        {
+          "char1": "G",
+          "char2": "6",
+          "confusion_score": 0.72,
+          "fonts_affected": ["Arial"],
+          "context_dependency": "Low"
+        },
+        {
+          "char1": "B",
+          "char2": "8",
+          "confusion_score": 0.69,
+          "fonts_affected": ["Verdana"],
+          "context_dependency": "Low"
+        }
+      ]
+    },
+    "international_characters": {
+      "cyrillic_latin_confusion": [
+        {
+          "cyrillic": "а",
+          "latin": "a",
+          "confusion_score": 0.98,
+          "note": "Virtually identical in most fonts"
+        },
+        {
+          "cyrillic": "о",
+          "latin": "o", 
+          "confusion_score": 0.97,
+          "note": "Identical in most fonts"
+        },
+        {
+          "cyrillic": "р",
+          "latin": "p",
+          "confusion_score": 0.96,
+          "note": "Very similar appearance"
+        },
+        {
+          "cyrillic": "с",
+          "latin": "c",
+          "confusion_score": 0.95,
+          "note": "Nearly identical"
+        },
+        {
+          "cyrillic": "е",
+          "latin": "e",
+          "confusion_score": 0.94,
+          "note": "Very similar"
+        }
+      ],
+      "greek_latin_confusion": [
+        {
+          "greek": "Α",
+          "latin": "A",
+          "confusion_score": 0.99,
+          "note": "Identical appearance"
+        },
+        {
+          "greek": "Β",
+          "latin": "B",
+          "confusion_score": 0.98,
+          "note": "Virtually identical"
+        },
+        {
+          "greek": "Ε",
+          "latin": "E",
+          "confusion_score": 0.97,
+          "note": "Very similar"
+        },
+        {
+          "greek": "Η",
+          "latin": "H",
+          "confusion_score": 0.96,
+          "note": "Nearly identical"
+        },
+        {
+          "greek": "Ι",
+          "latin": "I",
+          "confusion_score": 0.95,
+          "note": "Very similar"
+        }
+      ]
+    }
+  },
+  "real_world_examples": {
+    "successful_attacks": [
+      {
+        "target": "apple.com",
+        "malicious": "аpple.com",
+        "technique": "Cyrillic 'а' substitution",
+        "detection_rate": "Low - 15% of users noticed",
+        "impact": "High - credential harvesting"
+      },
+      {
+        "target": "google.com",
+        "malicious": "g00gle.com",
+        "technique": "Zero substitution for 'o'",
+        "detection_rate": "Medium - 35% of users noticed",
+        "impact": "Medium - phishing attempts"
+      },
+      {
+        "target": "microsoft.com",
+        "malicious": "micrοsoft.com",
+        "technique": "Greek omicron substitution",
+        "detection_rate": "Very Low - 8% of users noticed",
+        "impact": "High - malware distribution"
+      }
+    ],
+    "gTLD_specific_risks": [
+      {
+        "scenario": "Brand protection bypass",
+        "description": "Using visually similar characters to bypass trademark protection",
+        "example": "Registering .аpple instead of .apple",
+        "risk_level": "Very High",
+        "mitigation": "Comprehensive IDN variant blocking"
+      },
+      {
+        "scenario": "User confusion",
+        "description": "Users accidentally accessing wrong gTLD",
+        "example": "Typing .c0m instead of .com",
+        "risk_level": "High",
+        "mitigation": "Browser warnings and user education"
+      }
+    ]
+  },
+  "detection_algorithms": {
+    "visual_similarity_score": {
+      "description": "Composite score based on multiple visual factors",
+      "components": [
+        {
+          "factor": "Character shape similarity",
+          "weight": 0.4,
+          "calculation": "Pixel-level comparison across fonts"
+        },
+        {
+          "factor": "Stroke pattern similarity",
+          "weight": 0.3,
+          "calculation": "Analysis of character construction"
+        },
+        {
+          "factor": "Optical character recognition confusion",
+          "weight": 0.2,
+          "calculation": "OCR error rates between characters"
+        },
+        {
+          "factor": "Human perception studies",
+          "weight": 0.1,
+          "calculation": "User study confusion rates"
+        }
+      ]
+    },
+    "context_awareness": {
+      "font_rendering": "Analysis across multiple font families",
+      "size_scaling": "Testing at different font sizes",
+      "resolution_effects": "Impact of screen resolution on similarity",
+      "anti_aliasing": "Effects of font smoothing on perception"
+    }
+  },
+  "risk_assessment_rules": {
+    "automatic_flags": [
+      {
+        "condition": "Visual similarity > 0.9",
+        "action": "Automatic high-risk flag",
+        "confidence": 0.95,
+        "recommendation": "Reject or require extensive mitigation"
+      },
+      {
+        "condition": "Homograph attack pattern detected",
+        "action": "Security review required",
+        "confidence": 0.9,
+        "recommendation": "Enhanced security assessment"
+      },
+      {
+        "condition": "Multiple character substitutions",
+        "action": "Expert review",
+        "confidence": 0.85,
+        "recommendation": "Comprehensive analysis needed"
+      }
+    ],
+    "contextual_adjustments": [
+      {
+        "factor": "Existing brand protection",
+        "adjustment": "+0.2 to risk score",
+        "reason": "Higher stakes for protected brands"
+      },
+      {
+        "factor": "Financial services sector",
+        "adjustment": "+0.3 to risk score", 
+        "reason": "Security-critical applications"
+      },
+      {
+        "factor": "High-traffic domain",
+        "adjustment": "+0.1 to risk score",
+        "reason": "Greater potential impact"
+      }
+    ]
+  },
+  "mitigation_recommendations": {
+    "high_visual_similarity": [
+      "Implement comprehensive IDN variant blocking",
+      "Register defensive variants proactively",
+      "Deploy browser-based warnings",
+      "Educate users about visual attacks",
+      "Monitor for malicious registrations"
+    ],
+    "homograph_protection": [
+      "Use punycode display in browsers",
+      "Implement mixed-script detection",
+      "Deploy certificate transparency monitoring",
+      "Create visual differentiation in branding",
+      "Establish clear typography guidelines"
+    ],
+    "user_education": [
+      "Provide clear domain verification guides",
+      "Implement visual domain indicators",
+      "Create awareness campaigns",
+      "Deploy anti-phishing tools",
+      "Establish reporting mechanisms"
+    ]
+  }
+}
+
