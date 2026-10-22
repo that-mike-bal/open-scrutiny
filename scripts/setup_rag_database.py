@@ -33,13 +33,6 @@ class RAGDatabaseSetup:
         """Initialize OpenAI for generating embeddings"""
         try:
             api_key = os.getenv("OPENAI_API_KEY")
-            if not api_key:
-                secrets_dir = project_root / "secrets"
-                openai_key_file = secrets_dir / "openai_api_key.txt"
-                if openai_key_file.exists():
-                    with open(openai_key_file, 'r') as f:
-                        api_key = f.read().strip()
-
             if api_key:
                 self.openai_client = OpenAI(api_key=api_key)
                 logger.info("OpenAI configured for embedding generation")

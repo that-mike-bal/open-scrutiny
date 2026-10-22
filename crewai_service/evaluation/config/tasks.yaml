@@ -722,7 +722,11 @@ technical_gut_check:
 
     ISSUES FOUND: [List any obvious problems or "None"]
     OVERALL STATUS: [Ready for Report/Needs Review]
-  agent: string_analyst
+  agent: evaluation_validator
+  context:
+  - dns_stability_review
+  - comprehensive_similarity_analysis
+  - name_collision_assessment
   output_file: evaluation_reports/technical_validation_{tld_string}.md
   create_directory: true
 
@@ -848,14 +852,14 @@ legal_risk_validation:
     - Identify any gaps or inconsistencies in legal analysis
 
     🔧 VALIDATION APPROACH:
-    1. Use trademark analyzer to spot-check key findings
+    1. Spot-check the key findings of the deep research report against its own cited sources
     2. Validate risk categorization and legal assessment logic
     3. Cross-reference against trademark precedent patterns
     4. Assess completeness of multi-jurisdictional analysis
     5. Consult ICANN New gTLD Program Applicant Guidebook for trademark-related policies
 
     🔧 TOOL USAGE:
-    - Use "ICANN New gTLD Program Applicant Guidebook Search" to reference official ICANN guidance on trademark evaluation
+    - Use "ICANN Guidebook Search" to reference official ICANN guidance on trademark evaluation
     - Search for relevant sections like "Rights Protection", "Trademark Clearinghouse", "Objection Procedures"
 
     FOCUS: Ensure legal risk assessment is thorough and risk categorization is appropriate.
@@ -900,12 +904,14 @@ legal_risk_validation:
     - **Recommended Actions**: [Specific legal next steps]
 
     ## **🔧 VALIDATION DETAILS**
-    - **Validation Tools Used**: Trademark Analyzer, Legal Database Access, ICANN Guidebook
+    - **Validation Tools Used**: Deep research report review, ICANN Guidebook Search
     - **Data Sources**: USPTO, EUIPO, WIPO databases
     - **Guidebook Sections Referenced**: [List relevant sections]
     - **Validation Timestamp**: [Current timestamp]
     - **Validator**: Data Validation & Fact-Checking Specialist
-  agent: trademark_specialist
+  agent: evaluation_validator
+  context:
+  - deep_research_legal_assessment
   context_consumer:
   - risk_factors
   context_producer:
@@ -927,7 +933,10 @@ legal_gut_check:
 
     ISSUES FOUND: [List any obvious problems or "None"]
     OVERALL STATUS: [Ready for Report/Needs Review]
-  agent: trademark_specialist
+  agent: evaluation_validator
+  context:
+  - deep_research_legal_assessment
+  - legal_risk_validation
   output_file: evaluation_reports/legal_review_{tld_string}.md
   create_directory: true
 
@@ -972,7 +981,7 @@ geographic_name_assessment:
     - Special requirements (60% rule for regions, multiple jurisdictions)
 
     🔧 **ENHANCED TOOL USAGE**:
-    - Use "ICANN New gTLD Program Applicant Guidebook Search" to reference official ICANN guidance on geographic names
+    - Use "ICANN Guidebook Search" to reference official ICANN guidance on geographic names
     - Search for relevant sections like "Geographic Names", "Country Names", "Government Approval", "ISO 3166"
     - Use "Web Search for GAC Risk Analysis" to search for recent political developments (search terms like "TLD geographic concerns", "TLD government approval", "TLD political sensitivity")
     - Search for recent news about territorial disputes, government changes, or political sensitivities related to the string
@@ -1050,7 +1059,7 @@ safeguard_assessment:
     - Consider meanings in multiple languages and cultural contexts
 
     🔧 **ENHANCED TOOL USAGE**:
-    - Use "ICANN New gTLD Program Applicant Guidebook Search" to reference official ICANN guidance on safeguard questions
+    - Use "ICANN Guidebook Search" to reference official ICANN guidance on safeguard questions
     - Search for relevant sections like "Safeguard Questions", "Q175", "Q176", "Q177", "Q178", "Q179", "Q180"
     - Use "Web Search for GAC Risk Analysis" to search for recent cultural or regulatory developments (search terms like "TLD safeguard requirements", "TLD cultural sensitivity", "TLD regulatory concerns")
     - Search for recent news about consumer protection, harassment, or government oversight related to the string
@@ -1381,7 +1390,7 @@ cultural_linguistic_assessment:
     - Use "Web Search for GAC Risk Analysis" to search for recent cultural developments and sensitivities (search terms like "TLD cultural sensitivity", "TLD controversy", "TLD religious concerns")
     - Search for recent news about cultural conflicts, religious sensitivities, or social controversies related to the string
     - Use "Advanced String Similarity Analyzer" results to identify similar strings that might have cultural or linguistic implications
-    - Use "ICANN New gTLD Program Applicant Guidebook Search" for official guidance on cultural sensitivity requirements
+    - Use "ICANN Guidebook Search" for official guidance on cultural sensitivity requirements
 
     **ENHANCED APPROACH**:
     - **Conservative Cultural Assessment**: When uncertain about cultural implications, flag for cultural review
@@ -1470,6 +1479,11 @@ policy_gut_check:
 
     ISSUES FOUND: [List any obvious problems or "None"]
     OVERALL STATUS: [Ready for Report/Needs Review]
-  agent: gac_advisor
+  agent: evaluation_validator
+  context:
+  - geographic_name_assessment
+  - safeguard_assessment
+  - cultural_linguistic_assessment
+  - gac_risk_analysis
   output_file: evaluation_reports/policy_review_{tld_string}.md
   create_directory: true

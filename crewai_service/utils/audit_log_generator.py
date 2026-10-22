@@ -68,7 +68,7 @@ TASK_METADATA = {
         "display_name": "Technical Validation",
         "workflow": "technical_risk_assessment",
         "purpose": "sanity check of technical analysis for logic and consistency",
-        "agent": "Evaluation Validator",
+        "agent": "Data Validation & Fact-Checking Specialist",
         "tools": [],
         "expects_api_calls": False,
         "checks": [
@@ -125,7 +125,7 @@ TASK_METADATA = {
         "display_name": "Legal Risk Validation",
         "workflow": "legal_risk_assessment",
         "purpose": "synthesis and validation of legal risk findings",
-        "agent": "Global Trademark Risk Analyst",
+        "agent": "Data Validation & Fact-Checking Specialist",
         "tools": [],
         "expects_api_calls": False,
         "checks": [
@@ -138,7 +138,7 @@ TASK_METADATA = {
         "display_name": "Legal Validation",
         "workflow": "legal_risk_assessment",
         "purpose": "sanity check of legal analysis for logic and consistency",
-        "agent": "Evaluation Validator",
+        "agent": "Data Validation & Fact-Checking Specialist",
         "tools": [],
         "expects_api_calls": False,
         "checks": [
@@ -211,7 +211,7 @@ TASK_METADATA = {
         "display_name": "Policy Validation",
         "workflow": "policy_safeguard_review",
         "purpose": "sanity check of policy analysis for logic and consistency",
-        "agent": "Evaluation Validator",
+        "agent": "Data Validation & Fact-Checking Specialist",
         "tools": [],
         "expects_api_calls": False,
         "checks": [

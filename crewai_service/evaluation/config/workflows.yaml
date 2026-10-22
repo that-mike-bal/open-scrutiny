@@ -10,10 +10,9 @@ technical_risk_assessment:
   name: "Technical Risk Assessment"
   description: "Technical risk analysis - DNS stability, collision analysis, and similarity analysis with ICANN guidebook reference"
   agents:
-    - string_analyst               # DNS stability review
+    - string_analyst               # DNS stability review, similarity analysis
     - collision_analyst            # Name collision assessment
-    - string_analyst               # Comprehensive similarity analysis
-    - evaluation_validator         # Technical validation
+    - evaluation_validator         # Technical gut check
   tasks:
     - dns_stability_review   
     - comprehensive_similarity_analysis
@@ -34,7 +33,8 @@ legal_risk_assessment:
   name: "Legal Risk Assessment"
   description: "Comprehensive legal risk research using Gemini Deep Research — trademarks, patents, and IP conflicts with cited sources"
   agents:
-    - trademark_specialist
+    - trademark_specialist         # Deep research legal assessment
+    - evaluation_validator         # Legal risk validation, legal gut check
   tasks:
     - deep_research_legal_assessment
     - legal_risk_validation
@@ -58,17 +58,14 @@ policy_safeguard_review:
     Pure semantic analysis leveraging LLM strengths for interpretive evaluation with official ICANN guidance.
   process: "sequential"
   agents:
-    - gac_advisor                      # Geographic name assessment
-    - gac_advisor                      # Safeguard assessment  
-    - gac_advisor                      # GAC risk analysis
-    - gac_advisor                      # Cultural linguistic assessment
-    - gac_advisor                      # Policy validation
+    - gac_advisor                      # Geographic, safeguard, cultural, GAC assessments
+    - evaluation_validator             # Policy gut check
   tasks:
     - geographic_name_assessment       # → gac_advisor
     - safeguard_assessment            # → gac_advisor
     - cultural_linguistic_assessment  # → gac_advisor
     - gac_risk_analysis               # → gac_advisor
-    - policy_gut_check                # → gac_advisor
+    - policy_gut_check                # → evaluation_validator
   memory: false  # ✅ NO CROSS-PHASE CONTAMINATION
   share_crew: true  # 🔧 ENABLED - allows coordination (matches successful config)
   verbose: true

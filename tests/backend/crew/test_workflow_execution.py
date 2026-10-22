@@ -178,3 +178,46 @@ class TestBundledExample:
         assert crew.agents and crew.tasks
         assert all("example" in t.description for t in crew.tasks)
         assert all("{tld_string}" not in t.description for t in crew.tasks)
+
+    @pytest.mark.parametrize(
+        "workflow, validator_tasks",
+        [
+            ("technical_risk_assessment", ["technical_gut_check"]),
+            ("legal_risk_assessment", ["legal_risk_validation", "legal_gut_check"]),
+            ("policy_safeguard_review", ["policy_gut_check"]),
+        ],
+    )
+    def test_validator_runs_the_validation_and_gut_check_tasks(self, workflow, validator_tasks):
+        crew = CrewBuilder().build_crew(workflow, {"tld_string": "example", "use_case": "demo"})
+        validator = next(a for a in crew.agents if a.role == "Data Validation & Fact-Checking Specialist")
+        by_name = {t._task_name: t for t in crew.tasks}
+        for name in validator_tasks:
+            assert by_name[name].agent is validator, name
+            # Validation tasks declare the outputs they review and get exactly those
+            assert by_name[name].context, f"{name} must see the outputs it reviews"
+        last = crew.tasks[-1]
+        assert last.context == crew.tasks[:-1] or set(last.context) <= set(crew.tasks[:-1])
+
+    def test_guidebook_search_is_wired_to_the_agents_whose_prompts_cite_it(self):
+        builder = CrewBuilder()
+        for agent_name in ("string_analyst", "trademark_specialist", "gac_advisor", "evaluation_validator"):
+            tools = builder._get_agent_tools(agent_name)
+            assert "ICANN Guidebook Search" in [t.name for t in tools], agent_name
+
+    @patch("crewai_service.crew.CrewBuilder._load_yaml")
+    def test_task_without_context_key_keeps_crewai_default(self, mock_load_yaml):
+        from crewai.utilities.constants import NOT_SPECIFIED
+
+        mock_load_yaml.side_effect = configs(
+            agents={"a": {"role": "Analyst", "goal": "g", "backstory": "b"}},
+            tasks={
+                "first": {"description": "one", "expected_output": "x", "agent": "a"},
+                "second": {"description": "two", "expected_output": "y", "agent": "a"},
+                "third": {"description": "three", "expected_output": "z", "agent": "a", "context": ["first"]},
+            },
+        )
+        builder = CrewBuilder("test_config")
+        agents = builder._build_agents(["a"])
+        first, second, third = builder._build_tasks(["first", "second", "third"], agents, {}, {})
+        assert second.context is NOT_SPECIFIED, "unset context must fall through to all prior outputs"
+        assert third.context == [first]

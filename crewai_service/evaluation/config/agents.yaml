@@ -52,7 +52,7 @@ string_analyst:
     Equipped with string analysis and similarity tools, you identify technical risks and produce foundational context for other specialists.
     You ensure string configurations meet ICANN technical standards and provide reliable analysis for downstream decision-making.
   tool_ownership: "primary"  # Primary owner with sharing rights
-  tools: [string_analyzer, similarity_analyzer]
+  tools: [string_analyzer, similarity_analyzer, guidebook_search]
   responsibility: "Technical compliance & string characteristics"
   context_producer: ["technical_analysis_results"]
   context_consumer: []
@@ -71,7 +71,7 @@ trademark_specialist:
     patent conflicts, and broader IP risks using authoritative web sources.
     You ensure all legal risks are identified, categorized by severity, and backed by cited sources to guide application decisions.
   tool_ownership: "exclusive"
-  tools: [deep_research_legal_analyzer]
+  tools: [deep_research_legal_analyzer, guidebook_search]
   responsibility: "Comprehensive legal risk research with cited sources"
   context_producer: ["trademark_conflicts", "legal_risk_assessment"]
   context_consumer: ["technical_analysis_results"]
@@ -111,7 +111,7 @@ evaluation_validator:
     Equipped with verification tools and access to factual databases, you cross-reference outputs with authoritative sources like IANA lists and reserved names.
     You ensure all blocking decisions are based on factual data rather than agent assumptions or hallucinations.
   tool_ownership: "validation"
-  tools: [similarity_analyzer]
+  tools: [similarity_analyzer, guidebook_search]
   responsibility: "Fact-checking and validation against actual data sources"
   context_producer: ["validation_results"]
   context_consumer: ["binary_gate_results", "technical_analysis_results"]

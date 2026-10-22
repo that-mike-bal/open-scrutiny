@@ -321,13 +321,20 @@ class CrewBuilder:
             else:
                 logger.info(f"Assigned task '{task_name}' to agent '{agent.role}'")
             
-            # Build context dependencies
-            context = []
+            # Build context dependencies. Only pass `context` when the task
+            # declares one: an empty list would give the task NO prior output,
+            # whereas leaving it unset lets a sequential crew pass every
+            # previous task's output (what gut checks and validators need).
+            task_kwargs: Dict[str, Any] = {}
             if "context" in task_config:
+                context = []
                 for context_task_name in task_config["context"]:
                     if context_task_name in task_map:
                         context.append(task_map[context_task_name])
-            
+                    else:
+                        logger.warning(f"Task '{task_name}' lists unknown context task '{context_task_name}'")
+                task_kwargs["context"] = context
+
             # Add async execution option
             async_execution = task_config.get("async_execution", False)
 
@@ -336,8 +343,8 @@ class CrewBuilder:
                 description=description,
                 expected_output=expected_output,
                 agent=agent,
-                context=context,  # Set context dependencies
-                async_execution=async_execution
+                async_execution=async_execution,
+                **task_kwargs,
             )
             
             # Add binary blocking metadata

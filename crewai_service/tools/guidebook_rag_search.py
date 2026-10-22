@@ -23,7 +23,7 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 
 
 class GuidebookRAGSearchTool(BaseTool):
-    name: str = "ICANN Guidebook RAG Search"
+    name: str = "ICANN Guidebook Search"
     description: str = (
         "Searches the ICANN New gTLD Program Applicant Guidebook using semantic "
         "vector search. Returns authoritative guidance on evaluation criteria, "
