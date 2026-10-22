@@ -45,7 +45,7 @@ A fifth file, `environment.yaml`, holds per-environment runtime knobs (memory on
 
 1. **Builds agents** from the workflow's roster. Each gets an LLM from `get_model_for_agent(name)` (section 5), the tools its `agents.yaml` entry lists, `memory` from the environment override, and `max_rpm`.
 2. **Validates tools.** `_validate_agent_tools` raises `ValueError` if an agent declares tools and none of them imported, since that agent could not do its job. A partial load is logged as a warning.
-3. **Builds tasks** in workflow order. `{placeholders}` in `description` and `expected_output` are replaced for exactly the keys in `inputs`; other braces, such as JSON examples, are left alone. Each task binds to its `agent` by config key or role, with `context` resolved to earlier task objects so CrewAI passes their output forward.
+3. **Builds tasks** in workflow order. `{placeholders}` in `description` and `expected_output` are replaced for exactly the keys in `inputs`; other braces, such as JSON examples, are left alone. Each task binds to its `agent` by config key or role. A task that declares `context` receives exactly those earlier tasks' outputs; one that declares none is left at CrewAI's default and, in a sequential crew, receives every earlier output.
 4. **Decorates binary gates** when a workflow sets `binary_gates: true` and lists `blocking_tasks`: the task description gains a "return `BINARY_GATE_RESULT: BLOCKED`" instruction and `check_for_blocking` can halt the run on that signal.
 5. **Assembles the crew** with the process type, memory and sharing settings, and rate limit. Hierarchical workflows get a `manager_llm` from `get_model_by_name`.
 
@@ -69,7 +69,7 @@ The generation half drafts deliverables from the evaluation findings and an appl
 | Selection fields | `SelectionFieldHandler` | Returns the allowed options plus contextual tips. Zero model calls. |
 | Substantive fields | `SubstantiveAnswerGenerator` | One Gemini call per batch, with the applicant profile and the relevant evaluation task outputs as context. Questions are grouped by the task names they depend on so related answers share one call. |
 
-`AnswerGenerationService.generate_multiple` runs the tiers in order, reports progress as it goes, and records a confidence value per answer. Retrieval over the reference corpus and knowledge base goes through `rag_search_tool.py`, which embeds the query with OpenAI `text-embedding-ada-002` and calls the `similarity_search` Postgres function over the `rag_content` table (pgvector); `scripts/setup_rag_database.py` creates both. The YAML under `crewai_service/application/config/` documents the earlier crew-based pipeline and is kept for reference; `workflows.yaml` there says so.
+`AnswerGenerationService.generate_multiple` runs the tiers in order, reports progress as it goes, and records a confidence value per answer. Retrieval over the reference corpus and knowledge base goes through `rag_search_tool.py`, which embeds the query with OpenAI `text-embedding-ada-002` and calls the `similarity_search` Postgres function over the `rag_content` table (pgvector); `scripts/setup_rag_database.py` creates both. The evaluation agents' `guidebook_search` tool reads the same table's `guidebook_section` rows with `text-embedding-3-small`; [KNOWLEDGE_BASE.md](KNOWLEDGE_BASE.md) covers loading and swapping that corpus. The YAML under `crewai_service/application/config/` documents the earlier crew-based pipeline and is kept for reference; `workflows.yaml` there says so.
 
 The item schema the generator fills (questions, categories, field mappings) is seeded by [`scripts/categorize_questions.py`](../scripts/categorize_questions.py).
 
@@ -84,7 +84,8 @@ Postgres on Supabase. [`db/schema.sql`](../db/schema.sql) creates every table; [
 | `task_executions` | One row per task run: `result_status`, `confidence_score`, timings, and `result_data` JSONB holding the full output, `api_call_log`, and `tool_execution_summary` |
 | `task_definitions` | The task catalogue the UI joins against |
 | `applicants`, `tld_applications`, `application_questions_enhanced`, `application_answers_enhanced` | The generation half's entities, questions, and drafted answers |
-| `rag_content`, `rag_embeddings` | Vector index over the knowledge base, reference corpus, and evaluation outputs |
+| `rag_content` | The knowledge base: guidebook sections for the `guidebook_search` tool, plus applicant data, question guidance, and answer templates for generation. See [KNOWLEDGE_BASE.md](KNOWLEDGE_BASE.md) |
+| `rag_embeddings` | Evaluation outputs embedded for the chat panel |
 
 Two access patterns, by design:
 
@@ -173,7 +174,7 @@ The YAML declares who may call what, and the audit trail reports against those d
 | `access_pattern` | `exclusive`, `shared_context_with_validation` (results flow to a validator), or `shared_reference` (a read-only reference any listed agent may consult) |
 | `data_sources`, `api_keys_required` | What the tool reads and what it needs configured |
 
-The distinction worth knowing: only `tools` in `agents.yaml` and `module`/`class`/`args` in `tools.yaml` change what runs. The ownership keys are declarative. They make the intent reviewable in a diff, they drive `TASK_METADATA` and the audit narrative, and they are what a reader checks when a report cites a tool the agent should not have had.
+The distinction worth knowing: only `tools` in `agents.yaml` and `module`/`class`/`args` in `tools.yaml` change what runs. The ownership keys are declarative. They make the intent reviewable in a diff, they drive `TASK_METADATA` and the audit narrative, and they are what a reader checks when a report cites a tool the agent should not have had. Keep the two in step: a `secondary_agents` entry in `tools.yaml` should have a matching `tools` entry in `agents.yaml`, and a task prompt should only name tools its agent loads.
 
 Tools that do not exist in `tools.yaml` are skipped with an error in the log, and an agent whose declared tools all fail to import makes `build_crew` raise. If a config tree's tools cannot be imported from the current `sys.path`, the builder retries with the tree's parent directory added, so an example can ship its tools next to its config (see [ADAPTING.md](ADAPTING.md)).
 

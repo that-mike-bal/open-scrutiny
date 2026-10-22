@@ -49,10 +49,12 @@ Deploy to a fresh project in this order:
 4. **Build the RAG index** — `python scripts/setup_rag_database.py`, which loads
    the sample knowledge base (`data/example_registry_knowledgebase.md`) and the
    reference datasets in `data/`.
-5. **Guidebook PDF (optional)** — the gTLD example's guidebook search uses the
-   public *ICANN Applicant Guidebook* PDF if present in the repo root or `docs/`.
-   It is not bundled (large, user-supplied). Without it, guidebook searches
-   return a "not available" result and the rest of the evaluation continues.
+5. **Guidebook index (optional)** — the evaluation agents' `guidebook_search`
+   tool reads `guidebook_section` rows in `rag_content`. Load them from the
+   public *ICANN Applicant Guidebook* PDF (not bundled; large and ICANN's) with
+   `python db/populate_guidebook_embeddings.py --pdf-path <pdf> --clear-existing`.
+   Without them the tool returns a clear "no sections found" message and the
+   evaluation continues. Full detail: [docs/KNOWLEDGE_BASE.md](../docs/KNOWLEDGE_BASE.md).
 
 The end-to-end boot ("a fresh clone runs an evaluation") is an acceptance check
 to run after you've provisioned a backend and filled `.env` — not something the
@@ -315,16 +317,12 @@ Tracks batch answer generation runs.
 | `similarity_analysis_results` | 0 | Same |
 | `trademark_assessment_results` | 0 | Same |
 
-### RAG/Embeddings Tables (partially configured)
-| Table | Rows | Notes |
-|-------|------|-------|
-| `guidebook_embeddings` | 0 | Needs population |
-| `guidebook_sections` | 0 | |
-| `guidebook_search_queries` | 0 | |
-| `guidebook_search_results` | 0 | |
-| `application_question_embeddings` | 0 | |
-| `external_resource_embeddings` | 0 | |
-| `rag_content` | 5 | |
+### RAG/Embeddings Tables
+| Table | Notes |
+|-------|-------|
+| `rag_content` | **The live index.** Created by `scripts/setup_rag_database.py` together with the `similarity_search` function; guidebook sections are loaded by `db/populate_guidebook_embeddings.py`. See [docs/KNOWLEDGE_BASE.md](../docs/KNOWLEDGE_BASE.md). |
+| `rag_embeddings` | Evaluation outputs embedded for the chat panel (`/api/rag/embed-content`). |
+| `guidebook_embeddings`, `guidebook_sections`, `guidebook_search_queries`, `guidebook_search_results`, `application_question_embeddings`, `external_resource_embeddings` | Legacy, unused by the current tools. |
 
 ---
 

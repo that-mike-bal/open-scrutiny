@@ -29,11 +29,11 @@ Each workflow is a sequential crew. Memory is disabled everywhere so one item's 
 
 | Workflow | Tasks | Agents | Tools |
 |---|---|---|---|
-| `technical_risk_assessment` | DNS stability review → similarity analysis → name-collision assessment → technical gut check | string analyst, collision analyst, validator | string analyzer, similarity analyzer, magnitude collision checker, guidebook search |
-| `legal_risk_assessment` | deep-research legal assessment → legal risk validation → legal gut check | legal & IP risk analyst | Deep Research legal analyzer (Gemini Deep Research), guidebook search |
-| `policy_safeguard_review` | geographic name assessment → safeguard assessment → GAC risk analysis → policy gut check | GAC safeguard risk analyst | web search, GAC precedent database, similarity analyzer, guidebook search |
+| `technical_risk_assessment` | DNS stability review → similarity analysis → name-collision assessment → technical gut check (validator) | string analyst, collision analyst, validator | string analyzer, similarity analyzer, magnitude collision checker, guidebook search |
+| `legal_risk_assessment` | deep-research legal assessment → legal risk validation (validator) → legal gut check (validator) | legal & IP risk analyst, validator | Deep Research legal analyzer (Gemini Deep Research), guidebook search |
+| `policy_safeguard_review` | geographic name assessment → safeguard assessment → cultural/linguistic assessment → GAC risk analysis → policy gut check (validator) | GAC safeguard risk analyst, validator | web search, GAC precedent database, similarity analyzer, guidebook search |
 
-Every workflow ends in a **gut check**: a short task whose only job is to catch contradictions, unsupported claims, and missing sections in the preceding analysis. A dedicated **validator** agent cross-references technical findings against the local datasets.
+Every workflow ends in a **gut check** run by a dedicated **validator** agent: a short task whose only job is to catch contradictions, unsupported claims, and missing sections in the preceding analysis. Agents look rules up with the guidebook search tool over a pgvector index; see [docs/KNOWLEDGE_BASE.md](../docs/KNOWLEDGE_BASE.md) for loading it.
 
 Results are classified (`_classify_result_status` in `app.py`) into `CLEAR` / `PASS` / `FLAGGED` / `FAIL` / `REVIEW_REQUIRED`, given a 0–1 confidence score from the tool-execution record, and stored per task in `task_executions` with the full API-call log.
 

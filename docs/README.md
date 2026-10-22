@@ -8,6 +8,7 @@ Start with the root [README](../README.md): what the engine does, the bundled ex
 |---|---|
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | The evaluate half, the generate half, the data layer, the audit trail (classification, confidence, API-call attribution), per-agent model routing, and the tool-ownership model |
 | [`examples/icann-gtld.md`](examples/icann-gtld.md) | The bundled example end to end: the public ICANN rulebook, each workflow, agent, task rubric, and tool, and how the crew is assembled |
+| [`KNOWLEDGE_BASE.md`](KNOWLEDGE_BASE.md) | The rulebook index agents look things up in: what is in it, who reads it, how to load the Guidebook, how to swap in your own corpus |
 | [`../crewai_service/README.md`](../crewai_service/README.md) | The evaluation engine's layout and request flow |
 | [`CLIENT_ARCHITECTURE.md`](CLIENT_ARCHITECTURE.md) | React frontend: client-side binary gates, submission queue, direct Supabase reads, report rendering |
 

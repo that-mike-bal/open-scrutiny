@@ -80,6 +80,7 @@ Three habits from the bundled example are worth copying:
 - Return **structured JSON**, and tell the agent in the task prompt to report it verbatim. Agents are good at formatting and bad at remembering numbers.
 - Make the tool decide **blocking vs. soft** failures. That decision is a rule, so it belongs in code, not in the model.
 - Keep tools **side-effect free** and local where possible. A tool that reads a file cannot fail because an API key is missing. Tools that call out should go through the `logged_get` / `logged_post` wrappers in `crewai_service/utils/logged_requests.py` so the audit trail can attribute the calls.
+- When the rulebook is too long to put in a prompt, give agents a **lookup tool over an index** of it instead. [KNOWLEDGE_BASE.md](KNOWLEDGE_BASE.md) shows how the bundled example does that with the Applicant Guidebook and how to load your own corpus.
 
 The tool lives in a package next to the config (`brand_tools/`). When the builder cannot import a tool module from the current `sys.path`, it retries with the config tree's parent directory added, so `module: brand_tools.guideline_lookup` resolves without any `PYTHONPATH` setup.
 
@@ -176,7 +177,7 @@ distinctiveness_review:
 
 The third is the gut check: a tiny rubric that reviews the other two for logic, consistency, and completeness and is told not to redo the analysis.
 
-Placeholders are whatever you name them: `{product_name}` and `{category}` here. Only the keys you pass as `inputs` are substituted, so JSON examples in prompts are safe. Two rubric rules carried over from the bundled example: open every output with a `STATUS:` line from a fixed vocabulary, and let a tool decide anything a tool can decide.
+Placeholders are whatever you name them: `{product_name}` and `{category}` here. Only the keys you pass as `inputs` are substituted, so JSON examples in prompts are safe. `context` is optional: a task that declares none receives every earlier task's output in a sequential crew, so declare it when a task should see only specific outputs. Two rubric rules carried over from the bundled example: open every output with a `STATUS:` line from a fixed vocabulary, and let a tool decide anything a tool can decide.
 
 ## 7. Define the workflow
 

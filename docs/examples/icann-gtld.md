@@ -42,18 +42,18 @@ Every workflow sets `process: "sequential"`, `memory: false`, `allow_delegation:
 
 | Config key | Role | Tools loaded | Ownership | Produces → consumes |
 |---|---|---|---|---|
-| `string_analyst` | String Technical Analysis Specialist | `string_analyzer`, `similarity_analyzer` | `primary` | `technical_analysis_results` → nothing |
+| `string_analyst` | String Technical Analysis Specialist | `string_analyzer`, `similarity_analyzer`, `guidebook_search` | `primary` | `technical_analysis_results` → nothing |
 | `collision_analyst` | Collision Risk Analyst | `magnitude_collision_checker` | `exclusive`, `decision_authority: HIGH_RISK/PROCEED`, `collision_threshold: 8.0` | `binary_gate_results` → nothing |
-| `trademark_specialist` | Global Legal & IP Risk Analyst | `deep_research_legal_analyzer` | `exclusive`, 10-minute budget | `trademark_conflicts`, `legal_risk_assessment` → `technical_analysis_results` |
+| `trademark_specialist` | Global Legal & IP Risk Analyst | `deep_research_legal_analyzer`, `guidebook_search` | `exclusive`, 10-minute budget | `trademark_conflicts`, `legal_risk_assessment` → `technical_analysis_results` |
 | `gac_advisor` | GAC Safeguard Risk Analyst | `brave_web_search`, `similarity_analyzer`, `gac_precedent_analyzer`, `guidebook_search` | `enhanced` | geographic, safeguard, GAC, and cultural risk factors → technical and similarity results |
-| `evaluation_validator` | Data Validation & Fact-Checking Specialist | `similarity_analyzer` | `validation`, `validation_mode: true`, `contradiction_detection: true` | `validation_results` → gate and technical results |
+| `evaluation_validator` | Data Validation & Fact-Checking Specialist | `similarity_analyzer`, `guidebook_search` | `validation`, `validation_mode: true`, `contradiction_detection: true` | `validation_results` → the outputs it reviews |
 | `icann_compliance_specialist` | ICANN Compliance Gatekeeper | none (the binary gates moved to the client) | `exclusive`, `decision_authority: BLOCK/PROCEED` | `binary_gate_results` |
 | `risk_assessor` | Risk Synthesis Specialist | none | `none` | `risk_synthesis_results` → every specialist output |
 | `report_synthesizer` | Executive Report Compiler | none | `none` | `executive_report` → every specialist output |
 
 Every agent sets `memory: false` and `conservative_bias: true`, and each has its own `max_rpm` and `max_execution_time`. The `backstory` text is the persona prompt; for example the validator's reads, in part, "You validate agent findings against authoritative data sources to catch hallucinations, contradictions, and false claims."
 
-Two things to notice. First, the `tools` list is what the builder loads; `tools.yaml` also names `secondary_agents` for some tools, but that is documentation of intended sharing, not a grant. Second, the compliance gatekeeper and the two synthesisers are declared but not on any workflow roster: the gates run client-side, and report synthesis is done by a prompt after all three crews finish (section 7).
+Two things to notice. First, the `tools` list is what the builder loads; `tools.yaml` also names `secondary_agents` for shared tools, and the two agree: every agent whose prompts cite the guidebook has `guidebook_search` loaded (see [KNOWLEDGE_BASE.md](../KNOWLEDGE_BASE.md) for what it searches). Second, the compliance gatekeeper and the two synthesisers are declared but not on any workflow roster: the gates run client-side, and report synthesis is done by a prompt after all three crews finish (section 7).
 
 ## 4. The tasks and their rubrics
 
@@ -98,7 +98,7 @@ The rubric fixes the review threshold and the decision vocabulary:
 > ### **Multiple Collision TLDs Trigger**
 > - **Triggered**: [Yes/No] (Threshold: ≥3 flagged TLDs)
 
-**`technical_gut_check`** (`string_analyst`). The closing sanity pass, with a deliberately small rubric so it cannot drift into new analysis:
+**`technical_gut_check`** (`evaluation_validator`). The closing sanity pass, run by the validator over the three outputs above (declared as its `context`), with a deliberately small rubric so it cannot drift into new analysis:
 
 > OUTPUTS REVIEWED: DNS Stability, Similarity Analysis, Collision Assessment
 > LOGIC CHECK: [Pass/Fail] - Do the findings make logical sense?
@@ -116,14 +116,14 @@ The rubric fixes the review threshold and the decision vocabulary:
 
 Matches are graded STRONG, MEDIUM, or WEAK, and WEAK matches are excluded from the overall rating. The rubric asks for each conflict's jurisdiction, class, and status, an ICANN-specific block ("Legal Rights Objection Risk", "Rights Protection Adequacy"), and a "CITED SOURCES" section.
 
-**`legal_risk_validation`** (`trademark_specialist`). Re-reads the research as a validator: spot-checks findings, confirms the multi-jurisdiction coverage, and records discrepancies.
+**`legal_risk_validation`** (`evaluation_validator`). The validator re-reads the research report, which it receives as `context`: spot-checks findings against their cited sources, confirms the multi-jurisdiction coverage, consults the guidebook's rights-protection sections, and records discrepancies.
 
 > - **Legal Analysis Status**: ✅ VALIDATED / ⚠️ DISCREPANCIES / ❌ ISSUES FOUND
 > …
 > ## **⚠️ VALIDATION DISCREPANCIES**
 > [List any discrepancies between agent findings and validation, or "None identified"]
 
-**`legal_gut_check`** (`trademark_specialist`). Same four-line sanity rubric as the technical gut check.
+**`legal_gut_check`** (`evaluation_validator`). Same four-line sanity rubric as the technical gut check, over the research and the validation.
 
 ### Policy safeguard review
 
@@ -151,11 +151,11 @@ Matches are graded STRONG, MEDIUM, or WEAK, and WEAK matches are excluded from t
 > …
 > GAC OBJECTION LIKELIHOOD: [Low/Medium/High]
 
-**`policy_gut_check`** (`gac_advisor`). The closing sanity pass over all four policy outputs.
+**`policy_gut_check`** (`evaluation_validator`). The closing sanity pass over all four policy outputs.
 
 ### What the rubrics have in common
 
-Every substantive rubric opens with a status line drawn from a fixed vocabulary, names the tools and data it used, separates findings from recommendations, and ends with a confidence block and an "Agent Reasoning Summary". That shape is what the classifier in `app.py` reads (see [ARCHITECTURE.md](../ARCHITECTURE.md#result-classification)): the status words are what `_classify_result_status` keys on, and the fixed layout is what makes a gut check meaningful.
+Every substantive rubric opens with a status line drawn from a fixed vocabulary, names the tools and data it used, records the guidebook sections consulted, separates findings from recommendations, and ends with a confidence block and an "Agent Reasoning Summary". The validation and gut-check tasks declare the earlier tasks they review as `context`; a task that declares none receives every earlier output in the workflow. That shape is what the classifier in `app.py` reads (see [ARCHITECTURE.md](../ARCHITECTURE.md#result-classification)): the status words are what `_classify_result_status` keys on, and the fixed layout is what makes a gut check meaningful.
 
 ## 5. The tools
 
@@ -169,7 +169,7 @@ Every substantive rubric opens with a status line drawn from a fixed vocabulary,
 | `deep_research_legal_analyzer` | `DeepResearchLegalTool` | Gemini Deep Research (needs `GEMINI_API_KEY`) | A structured legal report with cited sources covering USPTO, EUIPO, and WIPO marks, patents, UDRP history, and ICANN-specific objection risk; falls back to model knowledge and says so when the API is unavailable |
 | `gac_precedent_analyzer` | `GACPrecedentTool` | `data/gac_precedents.json` (242 GAC Early Warning cases from the 2012 round, by category and outcome) | Matching precedents, a warning likelihood, an outcome prediction, and mitigation strategies |
 | `brave_web_search` | `BraveWebSearchTool` | Brave Search API (needs `BRAVE_API_KEY`) | Recent news on political, cultural, and regulatory developments related to the string |
-| `guidebook_search` | `GuidebookRAGSearchTool` | pgvector index over the Applicant Guidebook PDF (user-supplied; see `db/README.md`) | Semantic search hits with section references; a "not available" result when the corpus is not loaded |
+| `guidebook_search` | `GuidebookRAGSearchTool` (shown to agents as "ICANN Guidebook Search") | pgvector index of the Applicant Guidebook in `rag_content`, loaded by `db/populate_guidebook_embeddings.py` from the user-supplied PDF; see [KNOWLEDGE_BASE.md](../KNOWLEDGE_BASE.md) | The five closest guidebook sections with title, page, and relevance; a clear "no sections found" or configuration message when the index is not loaded |
 
 Each entry also carries `primary_agent`, `access_pattern`, and `data_sources` so a reader can see at a glance who owns the tool and what it reads. External calls go through logged request wrappers, which is how the audit trail attributes API calls to tasks.
 
@@ -178,9 +178,9 @@ Each entry also carries `primary_agent`, `access_pattern`, and `data_sources` so
 Take `technical_risk_assessment`. When `app.py` calls `build_crew_for_workflow("technical_risk_assessment", {"tld_string": "example", "use_case": "..."}, config_dir=...)`:
 
 1. `CrewBuilder` loads the four YAML files and the shared `environment.yaml`, whose `current_environment` block sets `memory.enabled: false` and `max_rpm_default`.
-2. The roster `[string_analyst, collision_analyst, string_analyst, evaluation_validator]` is instantiated entry by entry. Each agent gets its LLM from `get_model_for_agent` (Gemini 2.5 Flash for all of these), its tools imported by `module` and `class` from `tools.yaml`, `memory=False`, and its own `max_rpm`. Repeating a name in the roster is a readability convention; tasks bind to the first instance of a role.
+2. The roster `[string_analyst, collision_analyst, evaluation_validator]` is instantiated. Each agent gets its LLM from `get_model_for_agent` (Gemini 2.5 Flash for all of these), its tools imported by `module` and `class` from `tools.yaml`, `memory=False`, and its own `max_rpm`.
 3. `_validate_agent_tools` confirms every agent with a `tools` list loaded at least one tool. If `similarity_analyzer` failed to import, the build would raise rather than run a crippled analyst.
-4. The four tasks are built in order. `{tld_string}` becomes `example` in each description and rubric; the JSON examples inside the prompts are untouched because only the passed input keys are substituted. Each task binds to its `agent` by config key.
+4. The four tasks are built in order. `{tld_string}` becomes `example` in each description and rubric; the JSON examples inside the prompts are untouched because only the passed input keys are substituted. Each task binds to its `agent` by config key, and the gut check's `context` resolves to the three task objects before it.
 5. `Crew(agents, tasks, process=sequential, memory=False, share_crew, max_rpm=10)` is returned.
 
 `app.py` then clears the API-call log, kicks the crew off, and for each task output runs `_classify_result_status`, slices the call log per task, computes a confidence score, and inserts a `task_executions` row. The legal and policy crews follow in the same way.

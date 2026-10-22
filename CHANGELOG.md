@@ -4,6 +4,17 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+- Tasks that declared no `context` were built with an empty list, which CrewAI treats as "no prior output". Gut checks and the legal validation pass therefore reviewed nothing. The builder now leaves `context` unset unless declared, and the validation and gut-check tasks declare the outputs they review.
+- The validation-mode agent now runs the legal validation pass and every gut check; previously those tasks were bound to the specialist whose work they were meant to check.
+- `guidebook_search` is loaded for every agent whose prompts cite it (string analyst, legal analyst, validator, as well as the GAC analyst), and the tool's name matches the prompts.
+
+### Added
+- `docs/KNOWLEDGE_BASE.md`: what is in the rulebook index, who reads it, how to load the Applicant Guidebook, and how to swap in another corpus.
+
+### Removed
+- The last file-based credential fallback (`scripts/setup_rag_database.py` reading `secrets/openai_api_key.txt`).
+
 ## [0.1.0] - 2026-10-21
 
 Initial public release.

@@ -23,7 +23,7 @@ Define expert agents, a ruleset, tools, and a workflow in YAML. Get auditable, r
 4. **Every task produces a rubric-shaped report.** Task prompts end in an `expected_output` template with explicit statuses (PASS / FLAGGED / BLOCKED, Minimal → High per dimension), and a closing gut-check task looks for contradictions.
 5. **Findings are stored with an audit trail**, then synthesised into a report and routed into the generation half, which drafts deliverables from the findings plus a knowledge base.
 
-The engine is config-driven: retargeting it means editing YAML and data, not Python. [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) has the full picture.
+The engine is config-driven: retargeting it means editing YAML and data, not Python. [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) has the full picture, and [docs/KNOWLEDGE_BASE.md](docs/KNOWLEDGE_BASE.md) covers the rulebook index agents look things up in.
 
 ---
 
@@ -35,9 +35,9 @@ That makes it the hardest version of the "rulebook + candidates" pattern: hard b
 
 | Workflow | Agents | Tools | What it checks |
 |---|---|---|---|
-| `technical_risk_assessment` | String analyst, collision analyst, validator | `string_analyzer`, `similarity_analyzer`, `magnitude_collision_checker` | DNS label and RFC syntax rules; visual and phonetic similarity against the IANA root database; name-collision magnitude from ICANN research data; gut check |
-| `legal_risk_assessment` | Legal & IP risk analyst | `deep_research_legal_analyzer` (Gemini Deep Research over USPTO, EUIPO, WIPO, patents, web) | Trademark and patent conflicts weighed by holder viability, class overlap, and fame rather than raw text matches; validation pass; gut check |
-| `policy_safeguard_review` | GAC safeguard risk analyst | `brave_web_search`, `gac_precedent_analyzer`, `similarity_analyzer`, `guidebook_search` | Geographic-name status, ICANN safeguard questions, cultural and linguistic meaning across languages, government-objection risk against 242 GAC Early Warning precedents; gut check |
+| `technical_risk_assessment` | String analyst, collision analyst, validator | `string_analyzer`, `similarity_analyzer`, `magnitude_collision_checker`, `guidebook_search` | DNS label and RFC syntax rules; visual and phonetic similarity against the IANA root database; name-collision magnitude from ICANN research data; validator gut check |
+| `legal_risk_assessment` | Legal & IP risk analyst, validator | `deep_research_legal_analyzer` (Gemini Deep Research over USPTO, EUIPO, WIPO, patents, web), `guidebook_search` | Trademark and patent conflicts weighed by holder viability, class overlap, and fame rather than raw text matches; validator re-checks the research and runs the gut check |
+| `policy_safeguard_review` | GAC safeguard risk analyst, validator | `brave_web_search`, `gac_precedent_analyzer`, `similarity_analyzer`, `guidebook_search` | Geographic-name status, ICANN safeguard questions, cultural and linguistic meaning across languages, government-objection risk against 242 GAC Early Warning precedents; validator gut check |
 
 The deep walkthrough, from the public Applicant Guidebook to each agent, task rubric, tool, and how the crew is assembled, is in [docs/examples/icann-gtld.md](docs/examples/icann-gtld.md).
 
@@ -88,7 +88,7 @@ cd client && npm run build-strict && npx vitest run
 ```
 `tests/live/` needs a running backend and real keys; it is excluded from the default run.
 
-> The bundled example's retrieval features use the public *ICANN Applicant Guidebook* PDF as a reference corpus. It is not included (it's large and user-supplied); RAG degrades gracefully without it. See [db/README.md](db/README.md) for where to place it.
+> The bundled example's agents look rules up in a pgvector index of the public *ICANN Applicant Guidebook*. The PDF is not included (it's large and ICANN's); the evaluation runs without it and the guidebook tool says so. [docs/KNOWLEDGE_BASE.md](docs/KNOWLEDGE_BASE.md) explains how to load it and how to swap in your own corpus.
 
 The engine is usable headless: `POST /api/evaluations/auto-submit` starts an evaluation and `GET /evaluations/{id}/workflows` reports progress. See [docs/API_REFERENCE.md](docs/API_REFERENCE.md).
 
@@ -126,13 +126,13 @@ Crew assembly (`crewai_service/crew.py`) reads the YAML above — you usually re
 - **Memory off between items.** CrewAI memory is disabled for every agent and crew (`memory: false`), and per-environment settings in `environment.yaml` enforce it. One string's trademark findings must never leak into the next string's report.
 - **Single-threaded queue with 409.** One evaluation runs at a time. A second submission gets HTTP 409 and the client-side queue retries. That was chosen over a Celery and Redis job system for a workload where throughput was never the bottleneck, and it keeps the audit trail unambiguous.
 - **Regex extraction over structured output.** Task results are classified by pattern matching on the report text (`_classify_result_status` in `crewai_service/app.py`) with explicit failure phrases checked first and `REVIEW_REQUIRED` as the ambiguous default. It survives model output drift better than a strict schema and never silently marks a degraded run as clear.
-- **Validator and gut-check layers.** A validation-mode agent is declared with `validation_mode: true` and `contradiction_detection: true`, and every workflow ends in a short gut-check task that reviews the preceding outputs for logic, consistency, and completeness before anything reaches the report. Each stored task carries a 0–1 confidence score derived from tool data reliability and result certainty.
+- **Validator and gut-check layers.** A separate validation-mode agent (`validation_mode: true`, `contradiction_detection: true`), with no stake in the findings, runs the legal validation pass and closes every workflow with a short gut check over the preceding outputs for logic, consistency, and completeness. Each stored task carries a 0–1 confidence score derived from tool data reliability and result certainty.
 
 ---
 
 ## Status and roadmap
 
-**v0.1.0.** The engine, the bundled example, the React client, and the generation half are complete and documented; 110 backend tests and a strict TypeScript build pass in CI.
+**v0.1.0.** The engine, the bundled example, the React client, and the generation half are complete and documented; 115 backend tests and a strict TypeScript build pass in CI.
 
 Planned next:
 - A bundled sample report and UI screenshots.
