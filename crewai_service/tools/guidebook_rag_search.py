@@ -4,8 +4,8 @@ ICANN Guidebook RAG Search Tool
 Semantic search over the ICANN New gTLD Program Applicant Guidebook
 using vector embeddings stored in the rag_content table.
 
-Replaces the local-PDF-based GuidebookSearchTool for production use
-where the PDF file is not available on the server filesystem.
+Searches the pgvector index described in docs/KNOWLEDGE_BASE.md; the PDF itself
+is never read at runtime.
 """
 
 import json
