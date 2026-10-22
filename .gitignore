@@ -111,7 +111,6 @@ htmlcov/
 .tox/
 .nox/
 .ipynb_checkpoints
-.python-version
 
 # ---------------------------------------------------------------------------
 # Runtime / generated artifacts (not shipped)
