@@ -91,8 +91,7 @@ For a different rulebook, keep the table and the function and change what you lo
 
 Scope the corpus to what the agents are allowed to decide. A narrow, well-chunked rulebook beats a large one: agents search with short queries, and the top five hits are all they see.
 
-## Older pieces you may find
+## Related but separate
 
-- `crewai_service/tools/guidebook_search.py` (`GuidebookSearchTool`) is the earlier implementation that read the PDF from disk with a keyword search. It is not declared in `tools.yaml` and is kept only for reference.
-- `db/deploy_guidebook_embeddings.py` targets a separate `guidebook_embeddings` schema whose SQL file is no longer in the repository. Use `--target-table rag_content` (the default) with the populate script instead.
 - `crewai_service/rag_embedder.py` and the `/api/rag/*` endpoints write evaluation outputs into a `rag_embeddings` table for the chat panel. They are independent of the guidebook index.
+- The populate script's `--target-table guidebook_embeddings` option writes to a legacy table layout that nothing reads any more; leave the default, `rag_content`.

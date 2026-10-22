@@ -14,8 +14,8 @@ from .gac_precedent import GACPrecedentTool
 from .competitive_research import CompetitiveResearchTool
 from .deep_research_legal import DeepResearchLegalTool
 
-# Document Search Tools
-from .guidebook_search import GuidebookSearchTool
+# Document Search Tools (pgvector index of the guidebook; see docs/KNOWLEDGE_BASE.md)
+from .guidebook_rag_search import GuidebookRAGSearchTool
 
 # Web Search Tool (uses Brave Search API with logging)
 from .brave_web_search import BraveWebSearchTool
@@ -30,7 +30,7 @@ TOOL_REGISTRY = {
     'competitive_research_agent': CompetitiveResearchTool,  # Alias
     'deep_research_legal': DeepResearchLegalTool,
     'deep_research_legal_analyzer': DeepResearchLegalTool,  # Alias
-    'guidebook_search': GuidebookSearchTool,
+    'guidebook_search': GuidebookRAGSearchTool,
     'brave_web_search': BraveWebSearchTool,
 }
 
@@ -42,7 +42,7 @@ __all__ = [
     'GACPrecedentTool',
     'CompetitiveResearchTool',
     'DeepResearchLegalTool',
-    'GuidebookSearchTool',
+    'GuidebookRAGSearchTool',
     'BraveWebSearchTool',
     'TOOL_REGISTRY'
 ]

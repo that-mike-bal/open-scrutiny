@@ -14,6 +14,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Removed
 - The last file-based credential fallback (`scripts/setup_rag_database.py` reading `secrets/openai_api_key.txt`).
+- `crewai_service/tools/guidebook_search.py` (the earlier PDF-on-disk guidebook tool, undeclared) and `db/deploy_guidebook_embeddings.py` (its schema file no longer existed). The `guidebook_search` registry entry now points at `GuidebookRAGSearchTool`.
 
 ## [0.1.0] - 2026-10-21
 

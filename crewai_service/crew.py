@@ -522,21 +522,6 @@ Otherwise, provide the standard analysis output above.
             # Get initialization arguments from config
             args = tool_config.get("args", {})
 
-            # Special handling for guidebook_path for the GuidebookSearchTool
-            if 'guidebook_path' in args:
-                # Construct the full path relative to the project root
-                guidebook_file = Path(args['guidebook_path'])
-                if not guidebook_file.is_absolute():
-                    # Assuming the script is run from the project root
-                    guidebook_file = Path.cwd() / guidebook_file
-                
-                if guidebook_file.exists():
-                    args['guidebook_path'] = str(guidebook_file)
-                else:
-                    logger.error(f"Guidebook file not found for tool '{tool_name}': {guidebook_file}")
-                    # Decide if the tool should fail or run without the file
-                    return None # Or initialize without the path: del args['guidebook_path']
-
             # Initialize the tool with its arguments
             tool = tool_class(**args)
             self._tool_cache[tool_name] = tool
